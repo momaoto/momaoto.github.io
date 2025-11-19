@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"momaoto.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"profile":{"enable":true,"tagline":"XJTU -> THU"}},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="快速运行 123456cd &lt;your-project-name&gt;cd vue&#x2F;vuenpm installnpm run build&#x2F;&#x2F; 或者npm run serve 其中，build和serve是定义在package.json里的脚本命令，前者用于正式部署到服务器供用户使用，后者用于本地开发调试实时预览，支持热更新。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue快速入门">
+<meta property="og:url" content="https://momaoto.github.io/posts/2457320618/index.html">
+<meta property="og:site_name" content="momaoto&#39;s blog">
+<meta property="og:description" content="快速运行 123456cd &lt;your-project-name&gt;cd vue&#x2F;vuenpm installnpm run build&#x2F;&#x2F; 或者npm run serve 其中，build和serve是定义在package.json里的脚本命令，前者用于正式部署到服务器供用户使用，后者用于本地开发调试实时预览，支持热更新。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-16T01:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-21T07:00:30.792Z">
+<meta property="article:author" content="Momaoto">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://momaoto.github.io/posts/2457320618/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://momaoto.github.io/posts/2457320618/","path":"posts/2457320618/","title":"Vue快速入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vue快速入门 | momaoto's blog</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/callout_blocks.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">momaoto's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-inbox fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E8%BF%90%E8%A1%8C"><span class="nav-number">1.</span> <span class="nav-text"> 快速运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vue%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text"> Vue项目结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#indexhtml%E4%B8%BB%E9%A1%B5%E9%9D%A2"><span class="nav-number">2.1.</span> <span class="nav-text"> index.html——主页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mainjs%E5%85%A5%E5%8F%A3%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text"> main.js——入口文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#appvue%E6%A0%B9%E7%BB%84%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text"> App.vue——根组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#indexjs%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.</span> <span class="nav-text"> index.js——路由配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vue%E8%AF%AD%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text"> Vue语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#template-%E9%83%A8%E5%88%86"><span class="nav-number">3.1.</span> <span class="nav-text"> &lt;template&gt; 部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#script-%E9%83%A8%E5%88%86"><span class="nav-number">3.2.</span> <span class="nav-text"> &lt;script&gt; 部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#style-%E9%83%A8%E5%88%86"><span class="nav-number">3.3.</span> <span class="nav-text"> &lt;style&gt; 部分</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Momaoto"
+      src="/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Momaoto</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/hekun.tian@qq.com" title="E-Mail → hekun.tian@qq.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://momaoto.github.io/posts/2457320618/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpg">
+      <meta itemprop="name" content="Momaoto">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vue快速入门 | momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue快速入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-06-16 09:00:00" itemprop="dateCreated datePublished" datetime="2024-06-16T09:00:00+08:00">2024-06-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-21 15:00:30" itemprop="dateModified" datetime="2024-08-21T15:00:30+08:00">2024-08-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%99%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">教程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="快速运行"><a class="markdownIt-Anchor" href="#快速运行"></a> 快速运行</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> &lt;your-project-name&gt;</span><br><span class="line"><span class="built_in">cd</span> vue/vue</span><br><span class="line">npm install</span><br><span class="line">npm run build</span><br><span class="line">// 或者</span><br><span class="line">npm run serve</span><br></pre></td></tr></table></figure>
+<p>其中，build和serve是定义在package.json里的脚本命令，前者用于正式部署到服务器供用户使用，后者用于本地开发调试实时预览，支持热更新。</p>
+<span id="more"></span>
+<h1 id="vue项目结构"><a class="markdownIt-Anchor" href="#vue项目结构"></a> Vue项目结构</h1>
+<p>在一个vue项目中，基本目录结构可能如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">my-vue-app/</span><br><span class="line">│</span><br><span class="line">├── public/</span><br><span class="line">│   └── index<span class="selector-class">.html</span>         # 应用的主<span class="selector-tag">HTML</span>文件</span><br><span class="line">│</span><br><span class="line">├── <span class="attribute">src</span>/</span><br><span class="line">│   ├── assets/            # 静态资源文件（图片、样式等）</span><br><span class="line">│   ├── components/        # Vue组件（页面一部分）</span><br><span class="line">│   ├── views/             # 路由视图组件（完整页面）</span><br><span class="line">│   ├── App<span class="selector-class">.vue</span>            # 根组件</span><br><span class="line">│   ├── <span class="selector-tag">main</span><span class="selector-class">.js</span>            # 应用的入口文件</span><br><span class="line">│   ├── router<span class="selector-class">.js</span>          # 路由配置（如果有的话）</span><br><span class="line">│   └── store<span class="selector-class">.js</span>           # Vuex状态管理（如果有的话）</span><br><span class="line">│</span><br><span class="line">├── package<span class="selector-class">.json</span>           # 项目依赖和脚本</span><br><span class="line">└── README<span class="selector-class">.md</span>              # 项目的说明文件</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其中，作为项目入口文件的有三个核心文件： <code>index.html</code> <code>main.js</code> <code>App.vue</code><br />
+下面以此次项目为例说明：</p>
+<h2 id="indexhtml主页面"><a class="markdownIt-Anchor" href="#indexhtml主页面"></a> <em><strong>index.html</strong></em>——主页面</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width,initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;&lt;%= BASE_URL %&gt;favicon.ico&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>&lt;%= htmlWebpackPlugin.options.title %&gt;<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">noscript</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">strong</span>&gt;</span>We&#x27;re sorry but &lt;%= htmlWebpackPlugin.options.title %&gt; doesn&#x27;t work properly without JavaScript enabled. Please enable it to continue.<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">noscript</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- built files will be auto injected --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在Vue项目中，<code>index.html</code> 通常是用来加载你的应用并提供一个 <code>div</code> 容器来挂载Vue实例。</p>
+<ul>
+<li><strong><code>&lt;head&gt;</code> 标签</strong>:<br />
+包含页面的元数据，包括字符集、兼容性设置、视口设置、图标链接和页面标题。</li>
+<li><strong><code>&lt;body&gt;</code> 标签</strong>:<br />
+包含页面的内容。这个区域会显示在浏览器窗口中。
+<ul>
+<li><strong><code>&lt;div id=&quot;app&quot;&gt;&lt;/div&gt;</code></strong>:<br />
+这是Vue应用的挂载点。Vue实例会在这里将你的组件渲染到页面上。<code>id=&quot;app&quot;</code> 指定了这个 <code>div</code> 的 <code>id</code> 为 <code>app</code>，在 <code>main.js</code> 中，Vue 实例会挂载到这个元素上。</li>
+<li>其余略<br />
+总之，<code>index.html</code>创建了一个id为&quot;app&quot;的容器，Vue.js应用将会挂载在这个元素上，通过在<code>main.js</code>中使用<code>app.mount('#app')</code>，Vue实例接管了这个<code>div</code>元素的管理，并将应用的内容渲染到这个元素中。</li>
+</ul>
+</li>
+</ul>
+<h2 id="mainjs入口文件"><a class="markdownIt-Anchor" href="#mainjs入口文件"></a> <em><strong>main.js</strong></em>——入口文件</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Vue</span> <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span> <span class="comment">// 引入Vue框架</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span> <span class="comment">// 引入根组件App.vue</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router&#x27;</span> <span class="comment">// 引入路由配置</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ElementUI</span> <span class="keyword">from</span> <span class="string">&#x27;element-ui&#x27;</span>; <span class="comment">// 引入ElementUI组件库</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;element-ui/lib/theme-chalk/index.css&#x27;</span>; <span class="comment">// 引入ElementUI的CSS样式</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./assets/global.css&#x27;</span>; <span class="comment">// 引入全局CSS样式</span></span><br><span class="line"><span class="keyword">import</span> request <span class="keyword">from</span> <span class="string">&#x27;@/utils/request&#x27;</span>; <span class="comment">// 引入自定义的请求工具</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Vue</span>.<span class="property">config</span>.<span class="property">productionTip</span> = <span class="literal">false</span> <span class="comment">// 关闭生产模式下的提示信息</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">ElementUI</span>); <span class="comment">// 使用ElementUI插件</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Vue</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">request</span> = request <span class="comment">// 将request工具挂载到Vue的原型上</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Vue</span>(&#123;</span><br><span class="line">    router, <span class="comment">// 注入路由配置</span></span><br><span class="line">    <span class="attr">render</span>: <span class="function"><span class="params">h</span> =&gt;</span> <span class="title function_">h</span>(<span class="title class_">App</span>), <span class="comment">// 渲染根组件App.vue</span></span><br><span class="line">    <span class="attr">data</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="attr">globalVar</span>: &#123;&#125;, <span class="comment">// 定义一个全局变量</span></span><br><span class="line">        &#125;&#125;,</span><br><span class="line">&#125;).$mount(<span class="string">&#x27;#app&#x27;</span>) <span class="comment">// 挂载Vue实例到id为app的元素上</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这是Vue应用的入口JavaScript文件。它通常是用来创建Vue实例并挂载到 <code>index.html</code> 中的 <code>div</code> 容器上，然后接管这个元素及其内容的控制。<br />
+核心：<code>new Vue(&#123;...&#125;).$mount(#app)</code>，将Vue根组件挂载到<code>&lt;div id=&quot;app&quot;&gt;</code>的元素（容器）上。</p>
+<h2 id="appvue根组件"><a class="markdownIt-Anchor" href="#appvue根组件"></a> <em><strong>App.vue</strong></em>——根组件</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div id = &quot;app&quot;&gt;</span><br><span class="line">        &lt;router-view/&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">#app&#123;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<p>干了一件事：设置一个div容器，里面使用<code>router-view</code>根据用户选择切换页面。</p>
+<blockquote>
+<p><code>router-view</code> 组件是 Vue Router 提供的一个内置组件，它会渲染当前路由匹配的组件。当用户导航到不同的路径时，<code>router-view</code> 会动态地切换显示不同的路由组件。</p>
+</blockquote>
+<p><strong>总结： <code>App.vue</code> 中的模板通过<code>main.js</code>被渲染到 <code>index.html</code> 中的 <code>&lt;div id=&quot;app&quot;&gt;</code> 位置。</strong></p>
+<h2 id="indexjs路由配置"><a class="markdownIt-Anchor" href="#indexjs路由配置"></a> <em><strong>index.js</strong></em>——路由配置</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Vue</span> <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">VueRouter</span> <span class="keyword">from</span> <span class="string">&#x27;vue-router&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册 VueRouter 插件到 Vue 实例</span></span><br><span class="line"><span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">VueRouter</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  <span class="comment">// 卖家管理模块路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/seller/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Seller&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;seller&quot; */</span> <span class="string">&#x27;../Seller/Manage.vue&#x27;</span>),</span><br><span class="line">    <span class="attr">redirect</span>: <span class="string">&quot;/seller/home&quot;</span>,  <span class="comment">// 默认重定向到 /seller/home</span></span><br><span class="line">    <span class="attr">children</span>: [</span><br><span class="line">      <span class="comment">// 子路由：卖家主页</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;home&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Home&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;seller&quot; */</span> <span class="string">&#x27;../Seller/Home.vue&#x27;</span>) &#125;,</span><br><span class="line">      <span class="comment">// 子路由：订单管理</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;order&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Order&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;seller&quot; */</span> <span class="string">&#x27;../Seller/Order.vue&#x27;</span>) &#125;,</span><br><span class="line">      <span class="comment">// 子路由：历史订单</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;history&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;History&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;seller&quot; */</span> <span class="string">&#x27;../Seller/History.vue&#x27;</span>) &#125;,</span><br><span class="line">      <span class="comment">// 子路由：花束管理</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;bouquet&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Bouquet&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;seller&quot; */</span> <span class="string">&#x27;../Seller/Bouquet.vue&#x27;</span>) &#125;,</span><br><span class="line">      <span class="comment">// 子路由：库存管理</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;inventory&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Inventory&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;seller&quot; */</span> <span class="string">&#x27;../Seller/Inventory.vue&#x27;</span>) &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 用户管理模块路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/user/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;User&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;user&quot; */</span> <span class="string">&#x27;../Seller/Manage.vue&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 监控模块路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/monitor/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Monitor&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;monitor&quot; */</span> <span class="string">&#x27;../Monitor/Manage.vue&#x27;</span>),</span><br><span class="line">    <span class="attr">redirect</span>: <span class="string">&quot;/monitor/order&quot;</span>,  <span class="comment">// 默认重定向到 /monitor/order</span></span><br><span class="line">    <span class="attr">children</span>: [</span><br><span class="line">      <span class="comment">// 子路由：订单监控</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;order&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Order&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;monitor&quot; */</span> <span class="string">&#x27;../Monitor/Order.vue&#x27;</span>) &#125;,</span><br><span class="line">      <span class="comment">// 子路由：历史监控</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;history&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;History&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;monitor&quot; */</span> <span class="string">&#x27;../Monitor/History.vue&#x27;</span>) &#125;,</span><br><span class="line">      <span class="comment">// 子路由：实时监控</span></span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">&#x27;monitor&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;Monitor&#x27;</span>, <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;monitor&quot; */</span> <span class="string">&#x27;../Monitor/Monitor.vue&#x27;</span>) &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 登录页面路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Login&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;login&quot; */</span> <span class="string">&#x27;../Login/Login.vue&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 注册页面路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/register&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Register&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;register&quot; */</span> <span class="string">&#x27;../Login/Register.vue&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 客户主界面路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/CustomerMain/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Customer&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;customer&quot; */</span> <span class="string">&#x27;../Customer/CustomerMain.vue&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 客户购买页面路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/CustomerBuy/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;CustomerBuy&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;customer-buy&quot; */</span> <span class="string">&#x27;../Customer/CustomerBuy.vue&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 客户搜索页面路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/CustomerSearch/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;CustomerSearch&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;customer-search&quot; */</span> <span class="string">&#x27;../Customer/CustomerSearch.vue&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 客户设计页面路由</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/CustomerDesign/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;CustomerDesign&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;customer-design&quot; */</span> <span class="string">&#x27;../Customer/CustomerDesign.vue&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建路由实例</span></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">VueRouter</span>(&#123;</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&#x27;history&#x27;</span>,  <span class="comment">// 使用 HTML5 History 模式，避免使用哈希值</span></span><br><span class="line">  <span class="attr">base</span>: process.<span class="property">env</span>.<span class="property">BASE_URL</span>,  <span class="comment">// 基础路径，通常与应用的部署路径一致</span></span><br><span class="line">  routes  <span class="comment">// 路由定义</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 导出路由实例，以便在 main.js 中使用</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> router</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="vue语法"><a class="markdownIt-Anchor" href="#vue语法"></a> Vue语法</h1>
+<p>一个vue文件既可以作为一个完整的页面，也可以作为一个组件嵌入其他页面中。如上述文件结构中，components里的vue文件就是专门用作复用的组件的。</p>
+<p>.vue文件结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;!-- 组件的 HTML 模板 --&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;&#123;&#123; title &#125;&#125;&lt;/h1&gt;</span><br><span class="line">    &lt;p&gt;&#123;&#123; description &#125;&#125;&lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">// 组件的 JavaScript 逻辑</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &#x27;MyComponent&#x27;,</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      title: &#x27;Hello World&#x27;,</span><br><span class="line">      description: &#x27;This is a description.&#x27;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">/* 组件的 CSS 样式 */</span><br><span class="line">h1 &#123;</span><br><span class="line">  color: blue;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="template-部分"><a class="markdownIt-Anchor" href="#template-部分"></a> <code>&lt;template&gt;</code> 部分</h2>
+<p><strong>作用</strong>：<code>&lt;template&gt;</code> 用于定义组件的 HTML 结构和布局，是组件的视图层。它描述了组件如何在浏览器中呈现。</p>
+<h2 id="script-部分"><a class="markdownIt-Anchor" href="#script-部分"></a> <code>&lt;script&gt;</code> 部分</h2>
+<p><strong>作用</strong>：<code>&lt;script&gt;</code> 用于定义组件的逻辑和行为，包括数据、方法、生命周期钩子等。它是组件的控制器。</p>
+<h2 id="style-部分"><a class="markdownIt-Anchor" href="#style-部分"></a> <code>&lt;style&gt;</code> 部分</h2>
+<p><strong>作用</strong>：<code>&lt;style&gt;</code> 用于定义组件的样式和视觉效果，包括布局、颜色、字体等。它是组件的外观层。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/" rel="tag"># 教程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/3219889624/" rel="next" title="hexo博客命令">
+                  hexo博客命令 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-solid fa-palette"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Momaoto</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">89k</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user-group"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="190,190,190" opacity="0.8" zIndex="-1" count="100" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

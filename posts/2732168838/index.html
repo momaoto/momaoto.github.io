@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"momaoto.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"profile":{"enable":true,"tagline":"XJTU -> THU"}},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="p.s.：每次和人说起薪资，要么说总包，要么说税前月薪，就会被问“这是啥都没扣的，到手还要少好多”，自己也明白到手会少很多，但不知道具体会扣掉多少，这里直接来了解一下算法。 当然，懒人攻略：在线工资计算器  先了解几个公式：   到手工资 &#x3D; 税前工资 - 五险一金 - 税   可支配工资 &#x3D; 到手工资 + 公积金 （我自己这么认为的）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的到手工资到底是多少？">
+<meta property="og:url" content="https://momaoto.github.io/posts/2732168838/index.html">
+<meta property="og:site_name" content="momaoto&#39;s blog">
+<meta property="og:description" content="p.s.：每次和人说起薪资，要么说总包，要么说税前月薪，就会被问“这是啥都没扣的，到手还要少好多”，自己也明白到手会少很多，但不知道具体会扣掉多少，这里直接来了解一下算法。 当然，懒人攻略：在线工资计算器  先了解几个公式：   到手工资 &#x3D; 税前工资 - 五险一金 - 税   可支配工资 &#x3D; 到手工资 + 公积金 （我自己这么认为的）">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-08-28T14:22:00.000Z">
+<meta property="article:modified_time" content="2025-02-09T03:51:01.913Z">
+<meta property="article:author" content="Momaoto">
+<meta property="article:tag" content="随笔">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://momaoto.github.io/posts/2732168838/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://momaoto.github.io/posts/2732168838/","path":"posts/2732168838/","title":"我的到手工资到底是多少？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>我的到手工资到底是多少？ | momaoto's blog</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/callout_blocks.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">momaoto's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-inbox fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E9%99%A9%E4%B8%80%E9%87%91"><span class="nav-number">1.</span> <span class="nav-text"> 五险一金</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8E"><span class="nav-number">2.</span> <span class="nav-text"> 税</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Momaoto"
+      src="/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Momaoto</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/hekun.tian@qq.com" title="E-Mail → hekun.tian@qq.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://momaoto.github.io/posts/2732168838/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpg">
+      <meta itemprop="name" content="Momaoto">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="我的到手工资到底是多少？ | momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我的到手工资到底是多少？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-08-28 22:22:00" itemprop="dateCreated datePublished" datetime="2024-08-28T22:22:00+08:00">2024-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-02-09 11:51:01" itemprop="dateModified" datetime="2025-02-09T11:51:01+08:00">2025-02-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>p.s.：每次和人说起薪资，要么说总包，要么说税前月薪，就会被问“这是啥都没扣的，到手还要少好多”，自己也明白到手会少很多，但不知道具体会扣掉多少，这里直接来了解一下算法。<br />
+当然，懒人攻略：<a target="_blank" rel="noopener" href="https://www.zhipin.com/wage/">在线工资计算器</a></p>
+</blockquote>
+<p>先了解几个公式：</p>
+<ul>
+<li>
+<p>到手工资 = 税前工资 - 五险一金 - 税</p>
+</li>
+<li>
+<p>可支配工资 = 到手工资 + 公积金 （我自己这么认为的）</p>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="五险一金"><a class="markdownIt-Anchor" href="#五险一金"></a> 五险一金</h1>
+<p>社保即社会保险，就是五险。</p>
+<p>五险一金包含：</p>
+<ul>
+<li>养老保险（公司每个月付税前工资16%，个人8%）；</li>
+<li>生育保险（公司每个月付税前工资0.45-1%，个人0%）；</li>
+<li>医疗保险（公司每个月付税前工资8%，个人2%）；</li>
+<li>工伤保险（公司每个月付税前工资0.3-0.6%，个人0%）；</li>
+<li>失业保险（公司每个月付税前工资0.5，个人0.5%）；</li>
+<li>住房公积金（公司每个月付税前工资12%，个人12%）</li>
+</ul>
+<p>这么一算</p>
+<ul>
+<li>
+<p>到手工资 = 0.775 * 税前工资 - 税</p>
+</li>
+<li>
+<p>可支配工资 = 0.895 * 税前工资 - 税</p>
+</li>
+</ul>
+<p>好了，现在只需要了解税是如何计算的了。</p>
+<blockquote>
+<p>专门说说住房公积金。公积金可以通过<strong>租房</strong>的方式提取，条件是本地无房，且租房的支出超过了薪资的一定比例（比如5%）。此时可申请提取公积金，以北京为例，额度为4500元/季度、6600元/季度两种，第二种需要的申请材料更多。</p>
+</blockquote>
+<h1 id="税"><a class="markdownIt-Anchor" href="#税"></a> 税</h1>
+<p>目前计税方式可以参考下面的：</p>
+<table>
+<thead>
+<tr>
+<th>级数</th>
+<th>累计</th>
+<th>预扣率(%)</th>
+<th>速算扣除数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>不超过36000元的部分</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>超过36000元至144000元的部分</td>
+<td>10</td>
+<td>2520</td>
+</tr>
+<tr>
+<td>3</td>
+<td>超过144000元至300000元的部分</td>
+<td>20</td>
+<td>16920</td>
+</tr>
+<tr>
+<td>4</td>
+<td>超过300000元至420000元的部分</td>
+<td>25</td>
+<td>31920</td>
+</tr>
+<tr>
+<td>5</td>
+<td>超过420000元至660000元的部分</td>
+<td>30</td>
+<td>52920</td>
+</tr>
+<tr>
+<td>6</td>
+<td>超过660000元至960000元的部分</td>
+<td>35</td>
+<td>85920</td>
+</tr>
+<tr>
+<td>7</td>
+<td>超过960000元的部分</td>
+<td>45</td>
+<td>181920</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>新税法计算公式：<br />
+累计应纳税所得额 = 累计收入 - 累计免税收入 - 累计减除费用 - 累计专项扣除 - 累计专项附加扣除 - 累计依法确定的其他扣除<br />
+当月应纳税额 =（累计应纳税所得额 × 税率/预扣率 - 速算扣除数） - 累计已缴税额</p>
+</blockquote>
+<p>也就是说，每个月的税收是先计算当前累计计税收入，然后再用上面的表看对应的税率和扣除数，然后做乘法和减法得到。<strong>既然如此，那么到当月的累计税收就是到当月的累计计税收入乘上对应的预扣率 - 对应的速算扣除数。</strong></p>
+<p>好了，那么我们可以计算一年总共需要扣除多少税了。以刚毕业的大学生为例，假设税前工资为salary（月薪），那么这一年它的计税收入为：</p>
+<p>一年计税收入 = 12 * (salary - 5000 - 0.225 * salary - 1500 = 12 * (0.775 * salary - 6500)</p>
+<p>1）如果说 0.775 * salary - 6500 &lt;= 0 即 <strong>salary &lt;= 8387</strong> 那么你不需要缴税 （此时我不知道应该开心还是应该伤心）</p>
+<p>2）如果说 0.775 * salary - 6500 &lt;= 3000 即 <strong>salary &lt;= 12258</strong> 那么你的累计计税收入落在上表第一级，需要缴税： 12 * (0.775 * salary - 6500) * 0.03，那么每个月平均缴税(0.775 * salary - 6500) * 0.03</p>
+<p>3）如果说 0.775 * salary - 6500 &lt;= 12000 即 <strong>salary &lt;= 23871</strong> 那么你的累计计税收入落在上表第二级，需要缴税： 12 * (0.775 * salary - 6500) * 0.1 - 2520，那么每个月平均缴税(0.775 * salary - 6500) * 0.1 - 210</p>
+<p>4）如果说 0.775 * salary - 6500 &lt;= 25000 即 <strong>salary &lt;= 40645</strong> 那么你的累计计税收入落在上表第三级，需要缴税： 12 * (0.775 * salary - 6500) * 0.2 - 16920，那么每个月平均缴税(0.775 * salary - 6500) * 0.2- 1410</p>
+<p>5）如果说 0.775 * salary - 6500 &lt;= 35000 即 <strong>salary &lt;= 5354</strong>8 那么你的累计计税收入落在上表第四级，需要缴税： 12 * (0.775 * salary - 6500) * 0.25- 31920，那么每个月平均缴税(0.775 * salary - 6500) * 0.25- 2660</p>
+<p>6）如果说 0.775 * salary - 6500 &lt;= 55000 即 <strong>salary &lt;= 79355</strong> 那么你的累计计税收入落在上表第五级，需要缴税： 12 * (0.775 * salary - 6500) * 0.3- 52920，那么每个月平均缴税(0.775 * salary - 6500) * 0.3- 4410</p>
+<p>7）如果说 0.775 * salary - 6500 &lt;= 80000 即 <strong>salary &lt;= 111613</strong> 那么你的累计计税收入落在上表第六级，需要缴税： 12 * (0.775 * salary - 6500) * 0.35- 85920，那么每个月平均缴税(0.775 * salary - 6500) * 0.35- 7160</p>
+<p>8）如果说 0.775 * salary - 6500 &gt; 80000 即 <strong>salary &gt; 111613</strong> 那么你的累计计税收入落在上表第七级，需要缴税： 12 * (0.775 * salary - 6500) * 0.45- 181920，那么每个月平均缴税(0.775 * salary - 6500) * 0.45- 15160</p>
+<p>简单举几个例子：</p>
+<p>月薪一万：税37.5, 到手收入7712.5, 可支配收入8912.5</p>
+<p>月薪两万： 税690.0, 到手收入14810.0, 可支配收入17210.0</p>
+<p>月薪三万： 税 1940.0，到手收入21310.0，可支配收入 24910.0</p>
+<p>月薪四万： 税3490.0，到手收入27510.0，可支配收入32310.0</p>
+<p>月薪五万：税5402.5，到手收入33347.5，可支配收入39347.5</p>
+<p>当然上面这个计算没有考虑五险一金是有上限的，大家感兴趣可以看看如果考虑这个和上面分析的差距会有多大。</p>
+<p>按照以上计算出的可支配收入还需要减去租房成本，可称得上“真正到手收入”。</p>
+<blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/649649927">到手工资怎么算</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag"># 随笔</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/279645537/" rel="prev" title="常见通信协议知识整理">
+                  <i class="fa fa-angle-left"></i> 常见通信协议知识整理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/2825630907/" rel="next" title="HAL：CamX-CHI">
+                  HAL：CamX-CHI <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-solid fa-palette"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Momaoto</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">89k</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user-group"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="190,190,190" opacity="0.8" zIndex="-1" count="100" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

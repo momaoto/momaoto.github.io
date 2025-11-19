@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"momaoto.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"profile":{"enable":true,"tagline":"XJTU -> THU"}},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="要配置 SSH 免密登录（即使用 SSH 密钥认证），可以按照以下步骤操作：   假设环境  本地主机（Client） ：你当前使用的电脑 远程服务器（Server） ：你要免密登录的目标机器 用户名：user 服务器 IP：192.168.1.100">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh免密登陆">
+<meta property="og:url" content="https://momaoto.github.io/posts/808646382/index.html">
+<meta property="og:site_name" content="momaoto&#39;s blog">
+<meta property="og:description" content="要配置 SSH 免密登录（即使用 SSH 密钥认证），可以按照以下步骤操作：   假设环境  本地主机（Client） ：你当前使用的电脑 远程服务器（Server） ：你要免密登录的目标机器 用户名：user 服务器 IP：192.168.1.100">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-16T06:28:00.000Z">
+<meta property="article:modified_time" content="2025-09-17T05:31:40.484Z">
+<meta property="article:author" content="Momaoto">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="技巧">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://momaoto.github.io/posts/808646382/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://momaoto.github.io/posts/808646382/","path":"posts/808646382/","title":"ssh免密登陆"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ssh免密登陆 | momaoto's blog</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/callout_blocks.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">momaoto's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-inbox fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text"> 假设环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-1%E5%9C%A8%E6%9C%AC%E5%9C%B0%E7%94%9F%E6%88%90-ssh-%E5%AF%86%E9%92%A5"><span class="nav-number"></span> <span class="nav-text"> 步骤 1：在本地生成 SSH 密钥</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%90%8E%E4%BC%9A%E6%9C%89%E5%A6%82%E4%B8%8B%E6%8F%90%E7%A4%BA"><span class="nav-number">1.</span> <span class="nav-text"> 生成后会有如下提示：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-2%E5%A4%8D%E5%88%B6%E5%85%AC%E9%92%A5%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number"></span> <span class="nav-text"> 步骤 2：复制公钥到远程服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-1%E4%BD%BF%E7%94%A8-ssh-copy-id%E6%8E%A8%E8%8D%90"><span class="nav-number">1.</span> <span class="nav-text"> 方法 1：使用 ssh-copy-id（推荐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-2%E6%89%8B%E5%8A%A8%E5%A4%8D%E5%88%B6%E5%85%AC%E9%92%A5"><span class="nav-number">2.</span> <span class="nav-text"> 方法 2：手动复制公钥</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-3%E6%B5%8B%E8%AF%95%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95"><span class="nav-number"></span> <span class="nav-text"> 步骤 3：测试免密登录</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Momaoto"
+      src="/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Momaoto</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/hekun.tian@qq.com" title="E-Mail → hekun.tian@qq.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://momaoto.github.io/posts/808646382/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpg">
+      <meta itemprop="name" content="Momaoto">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ssh免密登陆 | momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ssh免密登陆
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-16 14:28:00" itemprop="dateCreated datePublished" datetime="2025-09-16T14:28:00+08:00">2025-09-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-09-17 13:31:40" itemprop="dateModified" datetime="2025-09-17T13:31:40+08:00">2025-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">技巧</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>要配置 SSH 免密登录（即使用 <strong>SSH 密钥认证</strong>），可以按照以下步骤操作：</p>
+<hr />
+<h3 id="假设环境"><a class="markdownIt-Anchor" href="#假设环境"></a> <strong>假设环境</strong></h3>
+<ul>
+<li><strong>本地主机（Client）</strong> ：你当前使用的电脑</li>
+<li><strong>远程服务器（Server）</strong> ：你要免密登录的目标机器</li>
+<li><strong>用户名</strong>：<code>user</code></li>
+<li><strong>服务器 IP</strong>：<code>192.168.1.100</code></li>
+</ul>
+<hr />
+<span id="more"></span>
+<h2 id="步骤-1在本地生成-ssh-密钥"><a class="markdownIt-Anchor" href="#步骤-1在本地生成-ssh-密钥"></a> <strong>步骤 1：在本地生成 SSH 密钥</strong></h2>
+<p>在本地终端（Linux / Mac / WSL / Git Bash / PowerShell）执行：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -<span class="selector-tag">b</span> <span class="number">4096</span> -C &quot;your_email<span class="keyword">@example</span>.com&quot;</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li><code>-t rsa</code>：生成 RSA 类型密钥（推荐）</li>
+<li><code>-b 4096</code>：密钥长度 4096 位（更安全）</li>
+<li><code>-C &quot;your_email@example.com&quot;</code>：添加注释，方便识别</li>
+</ul>
+<h3 id="生成后会有如下提示"><a class="markdownIt-Anchor" href="#生成后会有如下提示"></a> <strong>生成后会有如下提示：</strong></h3>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Generating <span class="keyword">public</span>/<span class="keyword">private</span> rsa <span class="keyword">key</span> pair.</span><br><span class="line">Enter file <span class="keyword">in</span> which <span class="keyword">to</span> save the <span class="keyword">key</span> (/home/user/.ssh/id_rsa):</span><br></pre></td></tr></table></figure>
+<p><strong>直接回车</strong>，默认保存在 <code>~/.ssh/id_rsa</code>（私钥） 和 <code>~/.ssh/id_rsa.pub</code>（公钥）。</p>
+<p>然后会让你输入 <strong>密码短语（passphrase）</strong> ：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Enter passphrase (empty for no passphrase):</span> </span><br><span class="line"><span class="attr">Enter same passphrase again:</span> </span><br></pre></td></tr></table></figure>
+<p>如果不想输入密码短语（免密），<strong>直接回车两次</strong>。</p>
+<hr />
+<h2 id="步骤-2复制公钥到远程服务器"><a class="markdownIt-Anchor" href="#步骤-2复制公钥到远程服务器"></a> <strong>步骤 2：复制公钥到远程服务器</strong></h2>
+<p>你可以用以下方法把 <code>id_rsa.pub</code> 复制到远程服务器：</p>
+<h3 id="方法-1使用-ssh-copy-id推荐"><a class="markdownIt-Anchor" href="#方法-1使用-ssh-copy-id推荐"></a> <strong>方法 1：使用 <code>ssh-copy-id</code>（推荐）</strong></h3>
+<p>如果本地有 <code>ssh-copy-id</code>，执行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh<span class="operator">-</span><span class="keyword">copy</span><span class="operator">-</span>id <span class="keyword">user</span><span class="variable">@192</span><span class="number">.168</span><span class="number">.1</span><span class="number">.100</span></span><br></pre></td></tr></table></figure>
+<p>然后输入 <strong>远程服务器的密码</strong>，成功后会自动配置。</p>
+<p>如果<code>ssh-copy-id</code>不可用(例如，windows下不支持这个命令)，可以新建git bash然后执行上述指令。如果也没有git bash，那么：</p>
+<hr />
+<h3 id="方法-2手动复制公钥"><a class="markdownIt-Anchor" href="#方法-2手动复制公钥"></a> <strong>方法 2：手动复制公钥</strong></h3>
+<p>如果 <code>ssh-copy-id</code> 不可用，可以手动操作：</p>
+<ol>
+<li><strong>查看公钥</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<p>输出类似：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA7... your_email<span class="keyword">@example</span>.com</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><strong>登录远程服务器</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh user@192.168.1.100</span><br></pre></td></tr></table></figure>
+<p>然后输入密码登录。<br />
+2. <strong>添加公钥到远程服务器的 <code>~/.ssh/authorized_keys</code></strong> 在远程服务器终端执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.ssh</span><br><span class="line"><span class="built_in">chmod</span> 700 ~/.ssh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;你的公钥内容&quot;</span> &gt;&gt; ~/.ssh/authorized_keys</span><br><span class="line"><span class="built_in">chmod</span> 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="步骤-3测试免密登录"><a class="markdownIt-Anchor" href="#步骤-3测试免密登录"></a> <strong>步骤 3：测试免密登录</strong></h2>
+<p>在本地运行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh <span class="keyword">user</span><span class="variable">@192</span><span class="number">.168</span><span class="number">.1</span><span class="number">.100</span></span><br></pre></td></tr></table></figure>
+<p>如果不再要求输入密码，说明配置成功 🎉。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/%E6%8A%80%E5%B7%A7/" rel="tag"># 技巧</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/4193411573/" rel="prev" title="给其他用户添加sudo权限">
+                  <i class="fa fa-angle-left"></i> 给其他用户添加sudo权限
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/4259025391/" rel="next" title="视触觉相关文献阅读">
+                  视触觉相关文献阅读 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-solid fa-palette"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Momaoto</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">89k</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user-group"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="190,190,190" opacity="0.8" zIndex="-1" count="100" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

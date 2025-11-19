@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"momaoto.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"profile":{"enable":true,"tagline":"XJTU -> THU"}},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="写于实习期结束在即，记录实习期间的一点点心得，分享给三个月前的自己与其他同样处境的小白。  5.13—8.15，结束了为期三个月的实习，参加了转正答辩，取得了不错的反馈。作为个人第一段企业实习，从刚进公司什么都不会到慢慢接触代码，配置开发环境，进行业务分析，期间经历了很多心态上的转变与能力上的提升。下面的内容不涉及复杂的专业知识，主要是心态与方法上的总结，期待在下一次实践中复用。  实习心得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="但行好事，莫问前程——首段实习总结">
+<meta property="og:url" content="https://momaoto.github.io/posts/2740227854/index.html">
+<meta property="og:site_name" content="momaoto&#39;s blog">
+<meta property="og:description" content="写于实习期结束在即，记录实习期间的一点点心得，分享给三个月前的自己与其他同样处境的小白。  5.13—8.15，结束了为期三个月的实习，参加了转正答辩，取得了不错的反馈。作为个人第一段企业实习，从刚进公司什么都不会到慢慢接触代码，配置开发环境，进行业务分析，期间经历了很多心态上的转变与能力上的提升。下面的内容不涉及复杂的专业知识，主要是心态与方法上的总结，期待在下一次实践中复用。  实习心得">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://momaoto.github.io/posts/2740227854/%E4%BD%86%E8%A1%8C%E5%A5%BD%E4%BA%8B%EF%BC%8C%E8%8E%AB%E9%97%AE%E5%89%8D%E7%A8%8B%E2%80%94%E2%80%94%E9%A6%96%E6%AE%B5%E5%AE%9E%E4%B9%A0%E6%80%BB%E7%BB%93_2024082111.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2740227854/%E4%BD%86%E8%A1%8C%E5%A5%BD%E4%BA%8B%EF%BC%8C%E8%8E%AB%E9%97%AE%E5%89%8D%E7%A8%8B%E2%80%94%E2%80%94%E9%A6%96%E6%AE%B5%E5%AE%9E%E4%B9%A0%E6%80%BB%E7%BB%93_2024082142.png">
+<meta property="article:published_time" content="2024-07-25T13:37:00.000Z">
+<meta property="article:modified_time" content="2025-09-02T02:34:29.217Z">
+<meta property="article:author" content="Momaoto">
+<meta property="article:tag" content="随笔">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://momaoto.github.io/posts/2740227854/%E4%BD%86%E8%A1%8C%E5%A5%BD%E4%BA%8B%EF%BC%8C%E8%8E%AB%E9%97%AE%E5%89%8D%E7%A8%8B%E2%80%94%E2%80%94%E9%A6%96%E6%AE%B5%E5%AE%9E%E4%B9%A0%E6%80%BB%E7%BB%93_2024082111.png">
+
+
+<link rel="canonical" href="https://momaoto.github.io/posts/2740227854/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://momaoto.github.io/posts/2740227854/","path":"posts/2740227854/","title":"但行好事，莫问前程——首段实习总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>但行好事，莫问前程——首段实习总结 | momaoto's blog</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/callout_blocks.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">momaoto's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-inbox fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%B9%A0%E5%BF%83%E5%BE%97"><span class="nav-number">1.</span> <span class="nav-text"> 实习心得</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A5%E9%97%A8%E9%87%8D%E8%A7%86%E5%8E%9F%E7%90%86%E5%88%86%E6%B8%85%E4%B8%BB%E6%AC%A1"><span class="nav-number">1.1.</span> <span class="nav-text"> 入门——重视原理，分清主次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86%E6%8A%8A%E6%8F%A1%E5%85%A8%E5%B1%80"><span class="nav-number">1.2.</span> <span class="nav-text"> 进阶——流程梳理，把握全局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%95%E6%9C%9B%E4%B8%8D%E5%95%BB%E5%BE%AE%E8%8A%92%E9%80%A0%E7%82%AC%E6%88%90%E9%98%B3"><span class="nav-number">1.3.</span> <span class="nav-text"> 展望——不啻微芒，造炬成阳</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Momaoto"
+      src="/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Momaoto</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/hekun.tian@qq.com" title="E-Mail → hekun.tian@qq.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://momaoto.github.io/posts/2740227854/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpg">
+      <meta itemprop="name" content="Momaoto">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="但行好事，莫问前程——首段实习总结 | momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          但行好事，莫问前程——首段实习总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-07-25 21:37:00" itemprop="dateCreated datePublished" datetime="2024-07-25T21:37:00+08:00">2024-07-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-09-02 10:34:29" itemprop="dateModified" datetime="2025-09-02T10:34:29+08:00">2025-09-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>写于实习期结束在即，记录实习期间的一点点心得，分享给三个月前的自己与其他同样处境的小白。</p>
+</blockquote>
+<p>5.13—8.15，结束了为期三个月的实习，参加了转正答辩，取得了不错的反馈。作为个人第一段企业实习，从刚进公司什么都不会到慢慢接触代码，配置开发环境，进行业务分析，期间经历了很多心态上的转变与能力上的提升。下面的内容不涉及复杂的专业知识，主要是心态与方法上的总结，期待在下一次实践中复用。</p>
+<h1 id="实习心得"><a class="markdownIt-Anchor" href="#实习心得"></a> 实习心得</h1>
+<h2 id="入门重视原理分清主次"><a class="markdownIt-Anchor" href="#入门重视原理分清主次"></a> 入门——重视原理，分清主次</h2>
+<p>入门一个新领域最好的方式是什么？不论哪个细分方向，在刚来什么都不会的时候，都建议先从效果业务等与日常生活紧密相关的方面开始看。比如，对于影像领域来说，什么是自动对焦？什么是自动白平衡？这些知识一来平时经常接触，容易引起兴趣从而加深记忆，二来与晦涩的代码与xml文件相去甚远，不需要刻意下功夫就可以理解。</p>
+<blockquote>
+<p>后面有机会更新一篇<a href="https://momaoto.github.io/posts/2366465946/">AE</a>相关的内容，是我一个上午对着资料整理出来的学习笔记。</p>
+</blockquote>
+<span id="more"></span>
+<p>然后就到了看代码的阶段。安卓源码可以在<a target="_blank" rel="noopener" href="http://aospxref.com/android-14.0.0_r2/">这里</a>查看，影像系统相关的代码分布在framework，hardware这几个仓中，几百万行的代码一开始完全不知道怎么入手，这里的经验是<strong>只看皮毛，只懂原理，不要深入，不看细节</strong>，这个阶段一旦深入会导致陷入递归的迷惑，最后开一大堆标签页大脑成功overflow，忘了自己最开始想看的是什么😎。</p>
+<p>可是即使一开始只看个大概还是很有难度，一上来面临的全是没有听过的名词，不理解的文件夹名、类名，看了后面忘前面，怎么解决呢？这里的经验是<strong>多找别人的代码分析</strong>，用按流程和按文件夹两种方式尽量多地增加自己对重要组件的印象。按经验像camera_provider和Camera Server这样的组件起码要看5篇别人的分析才能它们有个初步的认知，这期间通过对着别人的代码分析读代码的方式走关键流程，一边读一边记，把看到的类和里面的方法画下来（不需要理解，只做记录），这样就大概知道什么组件会参与什么流程。然后找找有没有对代码目录的介绍，了解一下每个文件夹里放的是做什么的组件，如此反复 ，再结合一些对整体架构介绍的文章，就能逐步入门。度过了最痛苦的这一段，后面遇到新的知识（比如feature2）就会快很多。<br />
+比较好的参考资料：<br />
+<a target="_blank" rel="noopener" href="https://deepinout.com/">极客笔记</a><br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/Linux_zhicheng/article/details/123529629">Camera 服务启动流程简析</a><br />
+<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/03954ac5f1ac">基于Android Camera2之openCamera 流程</a></p>
+<h2 id="进阶流程梳理把握全局"><a class="markdownIt-Anchor" href="#进阶流程梳理把握全局"></a> 进阶——流程梳理，把握全局</h2>
+<p>系统这方面的工作可以说是最复杂、最难上手的方向之一，按mentor的话说社招的有5年以上MTK工作经验的员工转Qcom得1年时间才能上手。自己的直观感受就是代码实在太多了，同去实习的算法集成、效果和驱动方向的小伙伴两个月的时候已经可以慢慢上手业务，或者在组会上发表自己的看法了，自己这里还在吭哧吭哧看代码。在上面介绍的看代码的方法中，流程梳理是最关键也最漫长的一个步骤。考虑到尽量让像三个月前的我一样的小白可以看懂，在这里按顺序总结一下需要我们梳理的流程，包括进程启动以及HAL层六大流程，这里只说大白话，可能不准确，但一定够易懂：</p>
+<ol>
+<li><strong>进程启动</strong>：发生在手机开机的时候，完成系统服务的注册和相关组件的建立，即在此之后APP就可以调用系统的相机服务了；</li>
+<li><strong>open</strong>：发生在手机点开相机app的时候，完成手机对其上摄像头的检测和上电，即在此之后你的手机就知道自己有几个什么样的摄像头，以及打开它们了；</li>
+<li><strong>configure stream</strong>：等下说，先看下一个；</li>
+<li><strong>request</strong>：相机app打开后立刻就看到预览画面，这时候看到的就是APP对下层请求得到的返回图像，只不过可能是每秒显示24张图像看起来在动一样。这个图像每看到一张就是APP已经下发了一次请求，而下发的过程就是这里的request。完成每一帧的相关buffer、结构体的创建等；</li>
+<li><strong>result</strong>：同样在你看到预览画面的时候进行，是上面说的返回图像的过程，即对request的应答。</li>
+<li><strong>现在来说configure stream</strong>：翻译为配流，发生在request之前open之后，也就是打开相机APP到看到预览画面之间的短时间内，完成与下层对后面将要下发的request的格式信息的约定。即，告诉摄像头，等会APP要什么格式的图像，每秒24帧还是每秒60帧，4K图像还是1080p图像，RAW格式还是YUV格式等等。这里注意，每次打开相机以及切换模式时都会发生一次配流。</li>
+<li><strong>flush</strong>：发生在切换相机模式或退出相机的时候，系统需要尽快清理干净buffer里没处理完的请求以便为新请求腾出位置，这个过程就是flush。这里的清理可以是正常处理完请求，也可以是直接丢弃，关键是不能超时。完成buffer清理、相关结构体的刷新。</li>
+<li><strong>close</strong>：发生在关闭相机APP的时候。可以是按返回键退出，也可以是按home键挂起，均会发生close流程。完成open阶段建立的数据结构的摧毁回收工作。</li>
+</ol>
+<p>上述的这个解释看似粗浅，但网上很难找到这样的解释，很多是本人过了蛮久才理解到这个程度的（比如configure stream）。带着这样的概念去看代码，可能对理解相关的逻辑有一些帮助。</p>
+<p>流程梳理的过程中当然要画图，便于后续不看代码也能查阅相关的类和操作。这里的经验是<strong>不要画UML图</strong>，而是画详细的二维的代码分析图（自己起的名字，我也不知道它叫什么）。<br />
+UML图：<br />
+<img src="%E4%BD%86%E8%A1%8C%E5%A5%BD%E4%BA%8B%EF%BC%8C%E8%8E%AB%E9%97%AE%E5%89%8D%E7%A8%8B%E2%80%94%E2%80%94%E9%A6%96%E6%AE%B5%E5%AE%9E%E4%B9%A0%E6%80%BB%E7%BB%93_2024082111.png" alt="" /><br />
+二维图：<br />
+<img src="%E4%BD%86%E8%A1%8C%E5%A5%BD%E4%BA%8B%EF%BC%8C%E8%8E%AB%E9%97%AE%E5%89%8D%E7%A8%8B%E2%80%94%E2%80%94%E9%A6%96%E6%AE%B5%E5%AE%9E%E4%B9%A0%E6%80%BB%E7%BB%93_2024082142.png" alt="" /></p>
+<p>原因在于UML虽然能清晰看到调用与返回以及它们的时序关系，但对于刚开始梳理的阶段我们往往抓不住重点，将很多不重要的函数放上去使得整个图过于繁冗，极大的影响可读性。而且拓展性差，后续看到什么新的过程想加上去很难。所以就画下面那样的二维图，便于扩展，对于错误以及冗余信息包容度高，而且美观可读，关键类的作用一目了然。</p>
+<p>最后，硬着头皮读代码还读不懂还要画图确实是蛮有挑战性的任务（删掉），但真的随着图越来越大，每一个看过的函数、每一段走过的流程都会变成与代码设计者最好的对话，仿佛身处迷宫之中越来越高，直至一眼就能看出每一条通往终点的路。</p>
+<h2 id="展望不啻微芒造炬成阳"><a class="markdownIt-Anchor" href="#展望不啻微芒造炬成阳"></a> 展望——不啻微芒，造炬成阳</h2>
+<p>代码梳理的过程要持续很久，后期就可以慢慢上手实战，这之后该干什么呢？</p>
+<p>把师兄和导师给的文档保存起来，过一阵看一眼，看不懂就先放着，总有一天突然能看懂了会觉得受益匪浅。比如前面提到的<a target="_blank" rel="noopener" href="https://deepinout.com/">极客笔记</a>，第1周看和第5周、第9周看的感受完全不同。</p>
+<p>随着知识的深入明白的越来越多，不明白的也变得更多，对不了解的地方保持敬畏，该查查该问问，切忌主观臆测，不然会出现认知出现重大偏差却不自知的情况。</p>
+<p>慢慢积累经验，从经验中总结出可复用的方法论，然后实践，然后修正，不断重复。经验是个很神奇的能力，本人亲自见证前辈依靠经验看着log在一个看上去毫无关联的地方做了修改然后解决了问题。这部分是最重要但教不会的，一定要重视积累。</p>
+<p>向别人讲你学到了什么，并尝试回答他们的问题。一起实习的不同方向的小伙伴来问你的方向的问题，要做到能用通俗的语言把它讲清，乃至在答辩上简洁准确地回答leader的问题，需要对知识反复的总结和深入的理解。这可能不是学习新知识最好的办法，但一定是检验旧知识最有效的方法。</p>
+<p>最后，实习期间的工作总结可以看看这里：<a href="/posts/76836219/" title="实习工作总结">实习工作总结</a></p>
+<p>以上，共勉。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag"># 随笔</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2460560126/" rel="prev" title="高通CamX-CHI 代码调用图">
+                  <i class="fa fa-angle-left"></i> 高通CamX-CHI 代码调用图
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/2444229209/" rel="next" title="Windows批处理与Linux脚本学习">
+                  Windows批处理与Linux脚本学习 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-solid fa-palette"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Momaoto</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">89k</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user-group"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="190,190,190" opacity="0.8" zIndex="-1" count="100" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"momaoto.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"profile":{"enable":true,"tagline":"XJTU -> THU"}},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转载：Chapter3. [6]Android Camera System: HAL-CamX-CHI，如有侵权联系删除。   一、概览  1.1 旧架构回顾(QCamera &amp; MM-Camera) 1）回顾高通平台Camera HAL历史，之前高通采用的是QCamera &amp; MM-Camera架构， 2）但是为了更精细化控制底层硬件(Sensor&#x2F;ISP等关键硬件)，同时方便">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HAL：CamX-CHI">
+<meta property="og:url" content="https://momaoto.github.io/posts/2825630907/index.html">
+<meta property="og:site_name" content="momaoto&#39;s blog">
+<meta property="og:description" content="转载：Chapter3. [6]Android Camera System: HAL-CamX-CHI，如有侵权联系删除。   一、概览  1.1 旧架构回顾(QCamera &amp; MM-Camera) 1）回顾高通平台Camera HAL历史，之前高通采用的是QCamera &amp; MM-Camera架构， 2）但是为了更精细化控制底层硬件(Sensor&#x2F;ISP等关键硬件)，同时方便">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/c3081f66e0227664ae7f8b8ab429bdfa.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/fb911a9dfc4dd89c7bcc30183743c972.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/63e21d376658fd1933222b079d4157d7.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/4470cdc4c16199ced4e4671a033babfb.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/e133d1455b5d6d74089f6d741ca55715.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/3222ef0e8d30277af62193ee2a951b62.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/76b28ea7dbb093646c7a904240456467.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/ba8194930747f3b2d61bd4facaa91010.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/261c57e64413186dfb6685901adb2863.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/a762d2afb4a6ae4a001b69454344e8cc.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/40b24c8dfceb7a9529421e67358fbfd6.jpeg">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/578782666128dc4ccf6da89c8ab716df.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/9780c6a7d4f390a4f19a613018c3a8fc.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/3ae2104c3f35d82c150e092dceb016d9.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/0e85da7bb9633b150cc148b56e544b33.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/40bd4a7ea1f66f2fce93e9f4a6432a9b.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/c599adda3c9c902547a2b4e129434f89.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/2825630907/750660c6efe80094bc69a4a384248641.png">
+<meta property="article:published_time" content="2024-09-06T16:24:00.000Z">
+<meta property="article:modified_time" content="2024-09-21T05:12:47.095Z">
+<meta property="article:author" content="Momaoto">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="转载">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://momaoto.github.io/posts/2825630907/c3081f66e0227664ae7f8b8ab429bdfa.png">
+
+
+<link rel="canonical" href="https://momaoto.github.io/posts/2825630907/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://momaoto.github.io/posts/2825630907/","path":"posts/2825630907/","title":"HAL：CamX-CHI"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HAL：CamX-CHI | momaoto's blog</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/callout_blocks.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">momaoto's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-inbox fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80-%E6%A6%82%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text"> 一、概览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E6%97%A7%E6%9E%B6%E6%9E%84%E5%9B%9E%E9%A1%BEqcamera-mm-camera"><span class="nav-number">1.1.</span> <span class="nav-text"> 1.1 旧架构回顾(QCamera &amp; MM-Camera)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-camx-chi%E5%9F%BA%E6%9C%AC%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text"> 1.2 CamX-CHI基本目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#121-camx%E4%B8%AD%E4%B8%BB%E8%A6%81%E7%9B%AE%E5%BD%95"><span class="nav-number">1.2.1.</span> <span class="nav-text"> 1.2.1 camx&#x2F;中主要目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#122-chi-cdk%E4%B8%AD%E4%B8%BB%E8%A6%81%E7%9B%AE%E5%BD%95"><span class="nav-number">1.2.2.</span> <span class="nav-text"> 1.2.2 chi-cdk&#x2F;中主要目录</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#chi-cdkcore"><span class="nav-number">1.2.2.0.1.</span> <span class="nav-text"> chi-cdk&#x2F;core</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#chi-cdkoem"><span class="nav-number">1.2.2.0.2.</span> <span class="nav-text"> chi-cdk&#x2F;oem</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#chi-cdkoemmulticamera"><span class="nav-number">1.2.2.0.2.1.</span> <span class="nav-text"> chi-cdk&#x2F;oem&#x2F;multicamera</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#chi-cdkoemnode"><span class="nav-number">1.2.2.0.2.2.</span> <span class="nav-text"> chi-cdk&#x2F;oem&#x2F;node</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E7%BB%84%E4%BB%B6%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text"> 二、基本组件概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#21-usecase"><span class="nav-number">2.1.</span> <span class="nav-text"> 2.1. Usecase</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#211-%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 2.1.1 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#212-%E9%80%9A%E7%94%A8%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.2.</span> <span class="nav-text"> 2.1.2 通用接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#22-feature"><span class="nav-number">2.2.</span> <span class="nav-text"> 2.2. Feature</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#221-%E6%A6%82%E5%BF%B5"><span class="nav-number">2.2.1.</span> <span class="nav-text"> 2.2.1 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#222-%E5%B8%B8%E7%94%A8%E7%9A%84feature"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 2.2.2 常用的Feature</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#23-session"><span class="nav-number">2.3.</span> <span class="nav-text"> 2.3. Session</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#231-%E6%A6%82%E5%BF%B5"><span class="nav-number">2.3.1.</span> <span class="nav-text"> 2.3.1 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#232-%E4%B8%BB%E8%A6%81%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.3.2.</span> <span class="nav-text"> 2.3.2 主要接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#24-pipeline"><span class="nav-number">2.4.</span> <span class="nav-text"> 2.4. Pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#241-%E6%A6%82%E5%BF%B5"><span class="nav-number">2.4.1.</span> <span class="nav-text"> 2.4.1 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#242-%E4%B8%BB%E8%A6%81%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.4.2.</span> <span class="nav-text"> 2.4.2 主要接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#25-node"><span class="nav-number">2.5.</span> <span class="nav-text"> 2.5. Node</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#26-link"><span class="nav-number">2.6.</span> <span class="nav-text"> 2.6. Link</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#27-port"><span class="nav-number">2.7.</span> <span class="nav-text"> 2.7. Port</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89-%E7%BB%84%E4%BB%B6%E7%BB%93%E6%9E%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text"> 三、组件结构关系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#31-%E7%BB%84%E4%BB%B6%E6%A6%82%E8%A6%81"><span class="nav-number">3.1.</span> <span class="nav-text"> 3.1 组件概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#32-%E7%BB%84%E4%BB%B6%E5%85%B3%E7%B3%BB"><span class="nav-number">3.2.</span> <span class="nav-text"> 3.2 组件关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#321-%E6%80%BB%E4%BD%93"><span class="nav-number">3.2.1.</span> <span class="nav-text"> 3.2.1 总体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#322-%E7%BB%86%E8%8A%82"><span class="nav-number">3.2.2.</span> <span class="nav-text"> 3.2.2 细节</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B-%E5%85%B3%E9%94%AE%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text"> 四、关键流程详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#41-provider-%E5%90%AF%E5%8A%A8%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">4.1.</span> <span class="nav-text"> 4.1. Provider 启动初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#42-%E6%89%93%E5%BC%80%E7%9B%B8%E6%9C%BA%E8%AE%BE%E5%A4%87%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E6%9C%BA%E8%AE%BE%E5%A4%87"><span class="nav-number">4.2.</span> <span class="nav-text"> 4.2. 打开相机设备&#x2F;初始化相机设备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-open"><span class="nav-number">4.2.1.</span> <span class="nav-text"> a) open</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-initialize"><span class="nav-number">4.2.2.</span> <span class="nav-text"> b) initialize</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#43-%E9%85%8D%E7%BD%AE%E7%9B%B8%E6%9C%BA%E8%AE%BE%E5%A4%87%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-number">4.3.</span> <span class="nav-text"> 4.3. 配置相机设备数据流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#431-%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B%E6%A6%82%E8%A6%81"><span class="nav-number">4.3.1.</span> <span class="nav-text"> 4.3.1 配置流程概要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#432-hal3%E6%8E%A5%E5%8F%A3-configure_streams%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.3.2.</span> <span class="nav-text"> 4.3.2 HAL3接口 configure_streams的具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-%E9%80%89%E6%8B%A9usecaseid"><span class="nav-number">4.3.2.1.</span> <span class="nav-text"> a) 选择UsecaseId</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-%E5%88%9B%E5%BB%BAusecase"><span class="nav-number">4.3.2.2.</span> <span class="nav-text"> b) 创建Usecase</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#432-advancedcamerausecasecreate"><span class="nav-number">4.3.3.</span> <span class="nav-text"> 4.3.2 AdvancedCameraUsecase::Create()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#create%E7%9A%84%E5%87%A0%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-number">4.3.3.1.</span> <span class="nav-text"> Create的几个阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%8E%B7%E5%8F%96xml%E6%96%87%E4%BB%B6%E4%B8%ADusecase%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">4.3.3.2.</span> <span class="nav-text"> 1. 获取XML文件中Usecase配置信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BAfeature"><span class="nav-number">4.3.3.3.</span> <span class="nav-text"> 2. 创建Feature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE%E6%B5%81%E9%87%8D%E5%BB%BAusecase%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">4.3.3.4.</span> <span class="nav-text"> 3. 保存数据流，重建Usecase的配置信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E8%B0%83%E7%94%A8%E7%88%B6%E7%B1%BBcamerausecasebase%E7%9A%84initialize%E6%96%B9%E6%B3%95%E8%BF%9B%E8%A1%8C%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B7%A5%E4%BD%9C"><span class="nav-number">4.3.3.5.</span> <span class="nav-text"> 4. 调用父类CameraUsecaseBase的initialize方法，进行一些常规初始化工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">4.3.3.6.</span> <span class="nav-text"> 小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#44-%E5%A4%84%E7%90%86%E6%8B%8D%E7%85%A7%E8%AF%B7%E6%B1%82"><span class="nav-number">4.4.</span> <span class="nav-text"> 4.4. 处理拍照请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#441-%E6%B5%81%E7%A8%8B%E6%A6%82%E8%A6%81"><span class="nav-number">4.4.1.</span> <span class="nav-text"> 4.4.1 流程概要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#442-camx-chi-%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-number">4.4.2.</span> <span class="nav-text"> 4.4.2 Camx-CHI 实现方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-camx-chi-capture-request%E6%B5%81%E8%BD%AC%E6%A6%82%E8%A7%88"><span class="nav-number">4.4.2.1.</span> <span class="nav-text"> A. CamX-CHI Capture request流转概览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-%E4%B8%A4%E4%B8%AA%E6%AF%94%E8%BE%83%E5%85%B3%E9%94%AE%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.4.2.2.</span> <span class="nav-text"> B. 两个比较关键的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#sessionstreamon"><span class="nav-number">4.4.2.2.1.</span> <span class="nav-text"> Session::StreamOn</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#sessionprocesscapturerequest"><span class="nav-number">4.4.2.2.2.</span> <span class="nav-text"> Session::ProcessCaptureRequest</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#deferredrequestqueue"><span class="nav-number">4.4.2.2.3.</span> <span class="nav-text"> DeferredRequestQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-%E4%BD%9C%E7%94%A8"><span class="nav-number">4.4.2.2.3.1.</span> <span class="nav-text"> 1. 作用</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-%E6%96%B9%E6%B3%95"><span class="nav-number">4.4.2.2.3.2.</span> <span class="nav-text"> 2. 方法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-%E6%B5%81%E7%A8%8B"><span class="nav-number">4.4.2.2.3.3.</span> <span class="nav-text"> 3. 流程</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#45-%E4%B8%8A%E4%BC%A0%E6%8B%8D%E7%85%A7%E7%BB%93%E6%9E%9C"><span class="nav-number">4.5.</span> <span class="nav-text"> 4.5. 上传拍照结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#451-%E6%B5%81%E7%A8%8B%E6%A6%82%E8%A6%81"><span class="nav-number">4.5.1.</span> <span class="nav-text"> 4.5.1 流程概要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#452-result%E4%B8%8A%E4%BC%A0%E8%BF%87%E7%A8%8B"><span class="nav-number">4.5.2.</span> <span class="nav-text"> 4.5.2 Result上传过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-session-usecase%E6%B5%81%E7%A8%8B"><span class="nav-number">4.5.2.1.</span> <span class="nav-text"> A. Session-&gt;Usecase流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-usecase-provider%E6%B5%81%E7%A8%8B"><span class="nav-number">4.5.2.2.</span> <span class="nav-text"> B. Usecase-&gt;Provider流程</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94-%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 五、总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Momaoto"
+      src="/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Momaoto</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/hekun.tian@qq.com" title="E-Mail → hekun.tian@qq.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://momaoto.github.io/posts/2825630907/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpg">
+      <meta itemprop="name" content="Momaoto">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HAL：CamX-CHI | momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HAL：CamX-CHI
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-09-07 00:24:00" itemprop="dateCreated datePublished" datetime="2024-09-07T00:24:00+08:00">2024-09-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-21 13:12:47" itemprop="dateModified" datetime="2024-09-21T13:12:47+08:00">2024-09-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AC%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">转载</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>24k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ifuleyou1668/article/details/134243186?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22134243186%22%2C%22source%22%3A%22ifuleyou1668%22%7D">Chapter3. [6]Android Camera System: HAL-CamX-CHI</a>，如有侵权联系删除。</p>
+</blockquote>
+<h1 id="一-概览"><a class="markdownIt-Anchor" href="#一-概览"></a> 一、概览</h1>
+<h2 id="11-旧架构回顾qcamera-mm-camera"><a class="markdownIt-Anchor" href="#11-旧架构回顾qcamera-mm-camera"></a> 1.1 旧架构回顾(QCamera &amp; MM-Camera)</h2>
+<p>1）回顾高通平台Camera HAL历史，之前高通采用的是QCamera &amp; MM-Camera架构，</p>
+<p>2）但是为了更精细化控制底层硬件(Sensor/ISP等关键硬件)，同时方便手机厂商自定义一些功能，现在提出了CamX-<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=CHI&amp;spm=1001.2101.3001.7020" title="CHI">CHI</a>架构，由于在CamX-CHI中完全看不到之前老架构的影子，所以它完全是一个全新的架构，</p>
+<p>3）它将一些高度统一的功能性接口抽离出来放到CamX中，将可定制化的部分放在CHI中供不同厂商进行修改，实现各自独有的特色功能，这样设计的好处显而易见，那便是即便开发者对于CamX并不是很了解，但是依然可以很方便的加入自定义的功能，从而降低了开发者在高通平台的开发门槛。</p>
+<span id="more"></span>
+<h2 id="12-camx-chi基本目录结构"><a class="markdownIt-Anchor" href="#12-camx-chi基本目录结构"></a> 1.2 CamX-CHI基本目录结构</h2>
+<p>1）接下来我们以最直观的目录结构入手对该架构做一个简单的认识，以下便是CamX-CHI基本目录结构：<br />
+<img src="c3081f66e0227664ae7f8b8ab429bdfa.png" alt="" /></p>
+<p>该部分代码主要位于 vendor/qcom/proprietary/ 目录下：<br />
+2）其中camx 代表了通用功能性接口的代码实现集合（CamX），chi-cdk代表了可定制化需求的代码实现集合（CHI），</p>
+<p>3）从图中可以看出Camx部分对上作为HAL3接口的实现，对下通过<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=v4l2&amp;spm=1001.2101.3001.7020" title="v4l2">v4l2</a>框架与Kernel保持通讯，中间通过互相dlopen so库并获取对方操作接口的方式保持着与CHI的交互。</p>
+<h3 id="121-camx中主要目录"><a class="markdownIt-Anchor" href="#121-camx中主要目录"></a> 1.2.1 camx/中主要目录</h3>
+<ol>
+<li><code>core/ ： 用于存放camx的核心实现模块，其中还包含了主要用于实现hal3接口的hal/目录，以及负责与CHI进行交互的chi/目录（8650如下）</code><br />
+<img src="fb911a9dfc4dd89c7bcc30183743c972.jpeg" alt="" /></li>
+<li><code>csl/： 用于存放主要负责camx与camera driver的通讯模块，为camx提供了统一的Camera driver控制接口（8650如下）</code><img src="63e21d376658fd1933222b079d4157d7.jpeg" alt="" /></li>
+<li><code>hwl/: 用于存放自身具有独立运算能力的硬件node，该部分node受csl管理（8650如下）</code>    <img src="4470cdc4c16199ced4e4671a033babfb.jpeg" alt="" /></li>
+<li><code>swl/: 用于存放自身并不具有独立运算能力，必须依靠CPU才能实现的node（8650如下）</code><br />
+<img src="e133d1455b5d6d74089f6d741ca55715.jpeg" alt="" /></li>
+</ol>
+<h3 id="122-chi-cdk中主要目录"><a class="markdownIt-Anchor" href="#122-chi-cdk中主要目录"></a> 1.2.2 chi-cdk/中主要目录</h3>
+<p><img src="3222ef0e8d30277af62193ee2a951b62.png" alt="" /></p>
+<h5 id="chi-cdkcore"><a class="markdownIt-Anchor" href="#chi-cdkcore"></a> chi-cdk/core</h5>
+<p><img src="76b28ea7dbb093646c7a904240456467.jpeg" alt="" /></p>
+<h5 id="chi-cdkoem"><a class="markdownIt-Anchor" href="#chi-cdkoem"></a> chi-cdk/oem</h5>
+<p><img src="ba8194930747f3b2d61bd4facaa91010.jpeg" alt="" /></p>
+<h6 id="chi-cdkoemmulticamera"><a class="markdownIt-Anchor" href="#chi-cdkoemmulticamera"></a> chi-cdk/oem/multicamera</h6>
+<p><img src="261c57e64413186dfb6685901adb2863.jpeg" alt="" /></p>
+<h6 id="chi-cdkoemnode"><a class="markdownIt-Anchor" href="#chi-cdkoemnode"></a> chi-cdk/oem/node</h6>
+<p><img src="a762d2afb4a6ae4a001b69454344e8cc.jpeg" alt="" /></p>
+<p><img src="40b24c8dfceb7a9529421e67358fbfd6.jpeg" alt="" /></p>
+<ol>
+<li>
+<p><code>chioverride/: 用于存放CHI实现的核心模块，负责与camx进行交互并且实现了CHI的总体框架以及具体的业务处理。</code></p>
+</li>
+<li>
+<p><code>bin/: 用于存放平台相关的配置项</code></p>
+</li>
+<li>
+<p><code>topology/: 用于存放用户自定的Usecase xml配置文件</code></p>
+</li>
+<li>
+<p><code>node/: 用于**存放用户自定义功能的node**</code></p>
+</li>
+<li>
+<p><code>module/: 用于存放不同sensor的配置文件，该部分在初始化sensor的时候需要用到</code></p>
+</li>
+<li>
+<p><code>tuning/: 用于存放不同场景下的效果参数的配置文件</code></p>
+</li>
+<li>
+<p><code>sensor/: 用于存放不同sensor的私有信息以及寄存器配置参数</code></p>
+</li>
+<li>
+<p><code>actuator/: 用于存放不同对焦模块的配置信息</code></p>
+</li>
+<li>
+<p><code>ois/： 用于存放防抖模块的配置信息</code></p>
+</li>
+<li>
+<p><code>flash/： 存放着闪光灯模块的配置信息</code></p>
+</li>
+<li>
+<p><code>eeprom/: 存放着eeprom外部存储模块的配置信息</code></p>
+</li>
+<li>
+<p><code>fd/: 存放了人脸识别模块的配置信息</code></p>
+</li>
+</ol>
+<h1 id="二-基本组件概念"><a class="markdownIt-Anchor" href="#二-基本组件概念"></a> 二、基本组件概念</h1>
+<h2 id="21-usecase"><a class="markdownIt-Anchor" href="#21-usecase"></a> 2.1. Usecase</h2>
+<h3 id="211-概念"><a class="markdownIt-Anchor" href="#211-概念"></a> 2.1.1 概念</h3>
+<p>作为CamX-CHI中<strong>最大的抽象概念</strong>，其中包含了多条实现特定功能的Pipeline，具体实现是在CHI中通过Usecase类完成的，该类主要负责了其中的业务处理以及资源的管理。</p>
+<h3 id="212-通用接口"><a class="markdownIt-Anchor" href="#212-通用接口"></a> 2.1.2 通用接口</h3>
+<p>1）Usecase类，提供了一系列通用接口，作为现有的所有Usecase的基类，</p>
+<p>2）其中，AdvancedCameraUsecase又继承于<strong>CameraUsecaseBase</strong>，相机中绝大部分场景会通过实例化AdvancedCameraUsecase来完成，它包括了几个主要接口：</p>
+<ol>
+<li>
+<p><code>Create(): 该方法是静态方法，用于创建一个AdvancedCameraUsecase实例，</code></p>
+<ol>
+<li><code>在其构造方法中会去获取XML中的相应的Usecase配置信息。</code></li>
+</ol>
+</li>
+<li>
+<p><code>ExecuteCaptureRequest(): 该方法用于下发一次Request请求。</code></p>
+</li>
+<li>
+<p><code>ProcessResultCb(): 该方法会在创建Session的过程中，</code></p>
+<ol>
+<li>
+<p><code>作为回调方法注册到其中，一旦Session数据处理完成的时候便会</code></p>
+</li>
+<li>
+<p><code>调用该方法将结果发送到AdvancedCameraUsecase中。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>ProcessDriverPartialCaptureResult(): 该方法会在创建Session的过程中，</code></p>
+<ol>
+<li>
+<p><code>作为回调方法注册到其中，一旦Session中产生了partial meta data的时候，</code></p>
+</li>
+<li>
+<p><code>便会调用该方法将其发送至AdvancedCameraUsecase中。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>ProcessMessageCb(): 该方法会在创建Session的过程中，作为回调方法注册到其中，</code></p>
+<ol>
+<li><code>一旦Session产生任何事件，便会调用该方法通知到AdvancedCameraUsecase中。</code></li>
+</ol>
+</li>
+<li>
+<p><code>ExecuteFlush(): 该方法用于刷新AdvancedCameraUsecase。</code></p>
+</li>
+<li>
+<p><code>Destroy(): 该方法用于安全销毁AdvancedCameraUsecase。</code></p>
+</li>
+</ol>
+<p>3）Usecase的可定制化部分被抽象出来放在了common_usecase.xml文件中，这里简单介绍其中的几个主要的标签含义：<br />
+Usecase</p>
+<ol>
+<li>
+<p><code>UsecaseName: 代表了该Usecase的名字，后期根据这个名字找到这个Usecase的定义。</code></p>
+</li>
+<li>
+<p><strong><code>Targets: 用于表示用于输出的数据流的集合，其中包括了数据流的格式，输出Size的范围等。</code></strong></p>
+</li>
+<li>
+<p><code>Pipeline: 用于定义该Usecase可以是使用的所有Pipeline，这里必须至少定义一条Pipeline。</code></p>
+</li>
+</ol>
+<h2 id="22-feature"><a class="markdownIt-Anchor" href="#22-feature"></a> 2.2. Feature</h2>
+<h3 id="221-概念"><a class="markdownIt-Anchor" href="#221-概念"></a> 2.2.1 概念</h3>
+<p>1）代表了一个特定的功能，该<strong>功能需要多条Pipeline组合</strong>起来实现，受Usecase统一管理，</p>
+<p>2）在CHI中通过Feature类进行实现，在XML中没有对应的定义，具体的Feature选取工作是在Usecase中完成的，通过在创建Feature的时候，传入Usecase的实例的方式，来和Usecase进行相互访问各自的资源。</p>
+<p>3）以下是现有的Feature，其中Feature作为基类存在，定义了一系列通用方法。</p>
+<p><img src="578782666128dc4ccf6da89c8ab716df.png" alt="" /></p>
+<h3 id="222-常用的feature"><a class="markdownIt-Anchor" href="#222-常用的feature"></a> 2.2.2 常用的Feature</h3>
+<ol>
+<li>
+<p><code>FeatureHDR: 用于实现HDR功能，它负责管理内部的一条或者几条pipeline的资源以及它们的流转，</code></p>
+<ol>
+<li><code>最终输出具有HDR效果的图像。</code></li>
+</ol>
+</li>
+<li>
+<p><code>FeatureMFNR: 用于实现MFNR功能，内部分为几个大的流程，分别包括</code></p>
+<ol>
+<li>
+<p><code>Prefiltering、Blending、Postfilter以及最终的OfflineNoiseReproces</code></p>
+</li>
+<li>
+<p><code>(这一个是可选择使能的)，每一个小功能中包含了各自的pipeline。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>FeatureASD: 用于AI功能的实现，在预览的时候，接收每一帧数据，</code></p>
+<ol>
+<li><code>并且进行分析当前场景的AI识别输出结果，并其通过诸如到metadata方式给到上层，进行后续的处理。</code></li>
+</ol>
+</li>
+</ol>
+<h2 id="23-session"><a class="markdownIt-Anchor" href="#23-session"></a> 2.3. Session</h2>
+<h3 id="231-概念"><a class="markdownIt-Anchor" href="#231-概念"></a> 2.3.1 概念</h3>
+<p>1）用于管理pipeline的抽象控制单元，一个Session中至少拥有一个pipeine，并且控制着所有的硬件资源，管控着每一个内部pipeline的request的流转以及数据的输入输出，</p>
+<p>2）它没有可定制化的部分，所以在CHI中的XML文件中并没有将Session作为一个独立的单元进行定义。</p>
+<p>Camera session是指在移动设备上使用相机进行拍摄或录制视频时，与相机硬件进行交互的过程。在Android系统中，相机session是通过Camera API来实现的。开发者可以通过Camera API来创建相机session，并控制相机的参数，如曝光、白平衡、焦距等。同时，开发者还可以通过Camera API来获取相机的预览画面，并进行图像处理和分析。在相机session中，开发者可以使用不同的模式来进行拍摄或录制，如照片模式、视频模式、慢动作模式等。相机session是移动应用开发中常用的技术之一，被广泛应用于拍照、直播、视频通话等场景。</p>
+<h3 id="232-主要接口"><a class="markdownIt-Anchor" href="#232-主要接口"></a> 2.3.2 主要接口</h3>
+<p>Session的实现主要通过CamX中的Session类，其主要接口如下：</p>
+<ol>
+<li>
+<p><code>Initialize(): 根据传入的参数SessionCreateData进行Session的初始化工作。</code></p>
+</li>
+<li>
+<p><code>NotifyResult(): 内部的Pipeline通过该接口将结果发送到Session中。</code></p>
+</li>
+<li>
+<p><code>ProcessCaptureRequest(): 该方法用于用户决定发送一个Request到Session中的时候调用。</code></p>
+</li>
+<li>
+<p><code>StreamOn(): 通过传入的Pipeline句柄，开始硬件的数据传输。</code></p>
+</li>
+<li>
+<p><code>StreamOff(): 通过传入的Pipeline句柄，停止硬件的数据传输。</code></p>
+</li>
+</ol>
+<h2 id="24-pipeline"><a class="markdownIt-Anchor" href="#24-pipeline"></a> 2.4. Pipeline</h2>
+<h3 id="241-概念"><a class="markdownIt-Anchor" href="#241-概念"></a> 2.4.1 概念</h3>
+<p>1）作为提供单一特定功能的所有资源的集合，维护着所有硬件资源以及数据的流转，</p>
+<p>2）每一个Pipeline包括了其中的Node/Link，在CamX中通过Pipeline类进行实现，负责整条Pipeline的软硬件资源的维护以及业务逻辑的处理，接下来我们简单看下该类的几个主要接口：</p>
+<h3 id="242-主要接口"><a class="markdownIt-Anchor" href="#242-主要接口"></a> 2.4.2 主要接口</h3>
+<ol>
+<li>
+<p><code>Create(): 该方法是一个静态方法，根据传入的PipelineCreateInputData信息来实例化一个Pipeline对象。</code></p>
+</li>
+<li>
+<p><code>StreamOn(): 通知Pipeline开始硬件的数据传输</code></p>
+</li>
+<li>
+<p><code>StreamOff(): 通知Pipeline停止硬件的数据传输</code></p>
+</li>
+<li>
+<p><code>FinalizePipeline(): 用于完成Pipeline的设置工作</code></p>
+</li>
+<li>
+<p><code>OpenRequest(): open一个CSL用于流转的Request</code></p>
+</li>
+<li>
+<p><code>ProcessRequest(): 开始下发Request</code></p>
+</li>
+<li>
+<p><code>NotifyNodeMetadataDone(): 该方法是Pipeline提供给Node，当Node内部生成了metadata,便会调用该方法来通知metadata已经完成，最后当所有Node都通知Pipeline metadata已经完成，Pipeline 便会调用**ProcessMetadataRequestIdDone**通知Session。</code></p>
+</li>
+<li>
+<p><code>NotifyNodePartialMetadataDone(): 该方法是Pipeline提供给Node，当Node内部生成了partial metadata,便会调用该方法来通知metadata已经完成，最后当所有Node都通知Pipeline metadata已经完成，Pipeline 便会调用ProcessPartialMetadataRequestIdDone通知Session。</code></p>
+</li>
+<li>
+<p><code>SinkPortFenceSignaled(): 用来通知Session 某个sink port的**fence**处于被触发的状态。</code></p>
+</li>
+<li>
+<p><code>NonSinkPortFenceSignaled(): 用来通知Session 某个non sink port的fence处于被触发的状态。</code></p>
+<ol>
+<li><code>Pipeline中的Node以及连接方式都在XML中被定义，其主要包含了以下几个标签定义：</code></li>
+</ol>
+</li>
+<li>
+<p><code>PipelineName: 用来定义该条Pipeline的名称</code></p>
+</li>
+<li>
+<p><code>NodeList: 该标签中定义了该条Pipeline的所有的Node</code></p>
+</li>
+<li>
+<p><code>PortLinkages: 该标签定义了Node上不同端口之间的连接关系</code></p>
+</li>
+</ol>
+<p><strong>问题</strong>：fence ？</p>
+<p><strong>答案</strong>：Camera fence是指在移动设备上使用相机进行拍摄或录制视频时，为了避免相机被其他应用程序占用而设置的一种机制。在Android系统中，相机fence是通过Camera API来实现的。当一个应用程序需要使用相机时，它需要向系统申请一个相机fence，并等待系统分配一个可用的相机资源。一旦分配成功，该应用程序就可以独占该相机资源，并进行拍摄或录制操作。如果其他应用程序也需要使用相机，则需要等待当前应用程序释放相机资源后才能继续使用。相机fence机制可以保证多个应用程序之间的相机资源不会发生冲突，从而提高了相机的稳定性和可靠性。</p>
+<p><strong>问题</strong>：qcom fence ?</p>
+<p><strong>答案</strong>：QCOM Camera Fence是高通公司在Android系统中实现的一种相机fence机制。它基于硬件层面的相机控制器，可以提供更高的相机资源管理效率和更好的性能表现。QCOM Camera Fence机制可以支持多个应用程序同时使用相机，并保证它们之间的资源不会发生冲突。同时，QCOM Camera Fence还支持多种相机模式，如照片模式、视频模式、慢动作模式等，可以满足不同应用程序的需求。在使用QCOM Camera Fence时，开发者需要使用特定的API来进行相机资源的申请和释放，以确保相机资源的正确管理和使用。QCOM Camera Fence机制已经被广泛应用于高通公司的移动设备中，并被认为是一种高效、稳定、可靠的相机资源管理方案。</p>
+<h2 id="25-node"><a class="markdownIt-Anchor" href="#25-node"></a> 2.5. Node</h2>
+<p>1）作为单个具有独立处理功能的抽象模块，可以是硬件单元也可以是软件单元，</p>
+<p>2）关于Node的具体实现是CamX中的Node类来完成的，其中CamX-CHI中主要分为两个大类，</p>
+<p>一个是高通自己实现的Node包括硬件Node，</p>
+<p>一个是CHI中提供给用户进行实现的Node，其主要方法如下：</p>
+<ol>
+<li>
+<p><code>Create(): 该方法是静态方法，用于实例化一个Node对象。</code></p>
+</li>
+<li>
+<p><code>ExecuteProcessRequest(): 该方法用于针对hwl node下发request的操作。</code></p>
+</li>
+<li>
+<p><code>ProcessRequestIdDone(): 一旦该Node当前request已经处理完成，便会通过调用该方法通知Pipeline。</code></p>
+</li>
+<li>
+<p><code>ProcessMetadataDone(): 一旦该Node的当前request的metadata已经生成，便会通过调用该方法通知到Pipeline。</code></p>
+</li>
+<li>
+<p><code>ProcessPartialMetadataDone(): 一旦该Node的当前request的partial metadata已经生成，便会通过调用该方法通知到Pipeline。</code></p>
+</li>
+<li>
+<p><code>CreateImageBufferManager(): 创建ImageBufferManager</code></p>
+<ol>
+<li><code>其可定制化的部分作为标签在XML中进行定义：</code></li>
+</ol>
+</li>
+<li>
+<p><code>NodeName： 用来定义该Node的名称</code></p>
+</li>
+<li>
+<p><code>NodeId: 用来指定该Node的ID，其中IPE NodeId为65538，IFE NodeId为65536，用户自定义的NodeId为255。</code></p>
+</li>
+<li>
+<p><code>NodeInstance: 用于定义该Node的当前实例的名称。</code></p>
+</li>
+<li>
+<p><code>NodeInstanceId: 用于指定该Node实例的Id。</code></p>
+</li>
+</ol>
+<h2 id="26-link"><a class="markdownIt-Anchor" href="#26-link"></a> 2.6. Link</h2>
+<p>1）用于定义不同Port的连接，一个Port可以根据需要建立多条与其它从属于不同Node的Port的连接,它通过标签来进行定义，其中包括了作为输入端口，作为输出端口。</p>
+<p>2）一个Link中包含了一个SrcPort和一个DstPort，分别代表了输入端口和输出端口，然后BufferProperties用于表示两个端口之间的buffer配置。</p>
+<h2 id="27-port"><a class="markdownIt-Anchor" href="#27-port"></a> 2.7. Port</h2>
+<p>1）作为Node的输入输出的端口，在XML文件中，标签用来定义一个输入端口，标签用来定义输出端口，</p>
+<p>2）每一个Node都可以根据需要使用一个或者多个输入输出端口，使用OutputPort以及InputPort结构体来进行在代码中定义。<br />
+Port</p>
+<ol>
+<li>
+<p><code>PortId: 该端口的Id: 该端口的名称</code></p>
+</li>
+<li>
+<p><code>NodeName: 该端口从属的Node名称</code></p>
+</li>
+<li>
+<p><code>NodeId: 该端口从属的Node的Id</code></p>
+</li>
+<li>
+<p><code>NodeInstance: 该端口从属的Node的实例名称</code></p>
+</li>
+<li>
+<p><code>NodeInstanceId: 该端口从属的Node的实例的Id</code></p>
+</li>
+</ol>
+<h1 id="三-组件结构关系"><a class="markdownIt-Anchor" href="#三-组件结构关系"></a> 三、组件结构关系</h1>
+<h2 id="31-组件概要"><a class="markdownIt-Anchor" href="#31-组件概要"></a> 3.1 组件概要</h2>
+<p>1）通过之前的介绍，我们对于几个基本组件有了一个比较清晰地认识，但是任何一个框架体系并不是仅靠组件胡乱堆砌而成的，相反，它们都必须基于各自的定位，按照各自所独有的行为模式，同时按照约定俗称的一系列规则组合起来，共同完成整个框架某一特定的功能。</p>
+<p>2）所以这里不得不产生一个疑问，在该框架中它们到底是如何组织起来的呢？它们之间的关系又是如何的呢？ 接下来我们以下图入手开始进行分析：</p>
+<p><img src="9780c6a7d4f390a4f19a613018c3a8fc.png" alt="" /></p>
+<h2 id="32-组件关系"><a class="markdownIt-Anchor" href="#32-组件关系"></a> 3.2 组件关系</h2>
+<h3 id="321-总体"><a class="markdownIt-Anchor" href="#321-总体"></a> 3.2.1 总体</h3>
+<p>由上图可以看到，几者是通过包含关系组合起来的，Usecase 包含Feature，而Feature包含了Session，Session又维护了内部的Pipeline的流转，而每一条pipeline中又通过Link将所有Node都连接了起来，接下我们就这几种关系详细讲解下：</p>
+<h3 id="322-细节"><a class="markdownIt-Anchor" href="#322-细节"></a> 3.2.2 细节</h3>
+<p>1）首先，一个Usecase代表了某个特定的图像采集场景，比如人像场景，后置拍照场景等等，在初始化的时候通过根据上层传入的一些具体信息来进行创建，这个过程中，一方面实例化了特定的Usecase，这个实例是用来管理整个场景的所有资源，同时也负责了其中的业务处理逻辑，另一方面，获取了定义在XML中的特定Usecase，获取了用于实现某些特定功能的pipeline。</p>
+<p>2）其次，在Usecase中，Feature是一个可选项，如果当前用户选择了HDR模式或者需要在Zoom下进行拍照等特殊功能的话，在Usecase创建过程中，便会根据需要创建一个或者多个Feature，一般一个Feature对应着一个特定的功能，如果场景中并不需要任何特定的功能，则也完全可以不使用也不创建任何Feature。</p>
+<p>3）然后，每一个Usecase或者Feature都可以包含一个或者多个Session，每一个Session都是直接管理并负责了内部的Pipeline的数据流转，其中每一次的Request都是Usecase或者Featuret通过Session下发到内部的Pipeline进行处理，数据处理完成之后也是通过Session的方法将结果给到CHI中，之后是直接给到上层还是将数据封装下再次下发到另一个Session中进行后处理，这都交由CHI来决定。</p>
+<p>4）其中，Session和Pipeline是一对多的关系，通常一个Session只包含了一条Pipeline，用于某个特定图像处理功能的实现，但是也不绝对，比如FeatureMFNR中包含的Session就包括了三条pipeline，又比如后置人像预览，也是用一个Session包含了两条分别用于主副双摄预览的Pipeline，主要是要看当前功能需要的pipeline数量以及它们之间是否存在一定关联。</p>
+<p>5）同时，根据上面关于Pipeline的定义，它内部包含了一定数量的Node，并且实现的功能越复杂，所包含的Node也就越多，同时Node之间的连接也就越错综复杂，比如后置人像预览虚化效果的实现就是将拿到的主副双摄的图像通过RTBOfflinePreview这一条Pipeline将两帧图像合成一帧具有虚化效果的图像，从而完成了虚化功能。</p>
+<p>6）最后Pipeline中的Node的连接方式是通过XML文件中的Link来进行描述的，每一个Link定义了一个输入端和输出端分别对应着不同Node上面的输入输出端口，通过这种方式就将其中的一个Node的输出端与另外一个Node的输入端，一个一个串联起来，</p>
+<p>=》等到图像数据从Pipeline的起始端开始输入的时候，便可以按照这种定义好的轨迹在一个一个Node之间进行流转，而在流转的过程中每经过一个Node都会在内部对数据进行处理，</p>
+<p>=》这样等到数据从起始端一直流转到最后一个Node的输出端的时候，数据就经过了很多次处理，这些处理效果最后叠加在一起便是该Pipeline所要实现的功能，比如降噪、虚化等等。</p>
+<h1 id="四-关键流程详解"><a class="markdownIt-Anchor" href="#四-关键流程详解"></a> 四、关键流程详解</h1>
+<h2 id="41-provider-启动初始化"><a class="markdownIt-Anchor" href="#41-provider-启动初始化"></a> 4.1. Provider 启动初始化</h2>
+<p>1）当系统启动的时候，Camera Provider主程序会被运行，在整个程序初始化的过程中会通过获取到的camera_module_t调用其get_number_of_camera接口获取底层支持的camera数量，由于是第一次获取，所以在CamX-CHI中会伴随着很多初始化动作，具体操作见下图：</p>
+<p><img src="3ae2104c3f35d82c150e092dceb016d9.png" alt="" /></p>
+<p>2）主要流程如下：</p>
+<ol>
+<li>
+<p><code>通过HAL3Module::GetInstance()静态方法实例化了HAL3Module对象，</code></p>
+<ol>
+<li>
+<p><code>在其构造方法里面通过HwEnvironment::GetInstance()静态方法又实例化了HwEnvironment对象，</code></p>
+</li>
+<li>
+<p><code>在其构造方法中，实例化了SettingsManager对象，然后又在它构造方法中通过</code></p>
+</li>
+<li>
+<p><code>OverrideSettingsFile对象获取了位于/vendor/etc/camera/camoverridesettings.txt</code></p>
+</li>
+<li>
+<p><code>文件中的平台相关的配置信息（通过这种Override机制方便平台厂商加入自定义配置），</code></p>
+</li>
+<li>
+<p><code>该配置文件中，可以加入平台特定的配置项，比如可以通过设置multiCameraEnable的值</code></p>
+</li>
+<li>
+<p><code>来表示当前平台是否支持多摄，或者通过设置overrideLogLevels设置项来配置</code></p>
+</li>
+<li>
+<p><code>CamX-CHI部分的Log输出等级等等。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>同时在HwEnvironment构造方法中会调用其Initialize方法，在该方法中实例化了CSLModeManager对象，</code></p>
+<ol>
+<li>
+<p><code>并通过CSLModeManager提供的接口，获取了所有底层支持的硬件设备信息，</code></p>
+</li>
+<li>
+<p><code>其中包括了Camera Request Manager、CAPS模块（该驱动模块主要用于CSL获取Camera平台驱动信息，</code></p>
+</li>
+<li>
+<p><code>以及IPE/BPS模块的电源控制,以及Sensor/IPE/Flash等硬件模块，并且通过调用</code></p>
+</li>
+<li>
+<p><code>CSLHwInternalProbeSensorHW方法获取了当前设备安装的Sensor模组信息，</code></p>
+</li>
+<li>
+<p><code>并且将获取的信息暂存起来，等待后续阶段使用，总得来说在HwEnvironment初始化的过程中,</code></p>
+</li>
+<li>
+<p><code>通过探测方法获取了所有底层的硬件驱动模块，并将其信息存储下来供后续阶段使用。</code></p>
+</li>
+</ol>
+</li>
+</ol>
+<p>3）之后通过调用HwEnvironment对象中的ProbeChiCompoents方法在/vendor/lib64/camera/components路径下找寻各个Node生成的So库，并获取Node提供的标准对外接口，这些Node不但包括CHI部分用户自定义的模块，还包括了CamX部分实现的硬件模块，并最后都将其都存入ExternalComponentInfo对象中，等待后续阶段使用。</p>
+<p>4）另外在初始化阶段还有一个比较重要的操作就是CamX 与CHI是<strong>通过互相<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=dlopen&amp;spm=1001.2101.3001.7020" title="dlopen">dlopen</a>对方的So库</strong>，获取了对方的入口方法，最后通过彼此的入口方法获取了对方操作方法集合，之后再通过这些操作方法与对方进行通讯，其主要流程见下图：</p>
+<p><img src="0e85da7bb9633b150cc148b56e544b33.png" alt="" /></p>
+<p>5）从上图不难看出，在HAL3Module构造方法中会去通过dlopen方法加载com.qti.chi.override.so库，并通过dlsym映射出CHI部分的入口方法chi_hal_override_entry，并调用该方法将HAL3Module对像中的成员变量m_ChiAppCallbacks(CHIAppCallbacks)传入CHI中，其中<strong>包含了很多函数指针</strong>，这些函数指针分别对应着CHI部分的操作方法集中的方法，一旦进入到CHI中，就会将CHI本地的操作方法集合中的函数地址依次赋值给m_ChiAppCallbacks，这样<strong>CamX后续就可以通过这个成员变量调用到CHI中方法</strong>，从而保持了与CHI的通讯。</p>
+<p>6）同样地，CHI中的ExtensionModule在初始化的时候，其构造方法中也会通过调用dlopen方法加载camera.qcom.so库，并将其入口方法ChiEntry通过dlsym映射出来，之后调用该方法，将g_chiContextOps（ChiContextOps，该结构体中定义了很多指针函数）作为参数传入CamX中，一旦进入CamX中，便会将本地的操作方法地址依次赋值给g_chiContextOps中的每一个函数指针，这样CHI之后就可以通过g_chiContextOps访问到CamX方法。</p>
+<h2 id="42-打开相机设备初始化相机设备"><a class="markdownIt-Anchor" href="#42-打开相机设备初始化相机设备"></a> 4.2. 打开相机设备/初始化相机设备</h2>
+<p>一旦用户打开了相机应用，App中便会去调用CameraManager的openCamera方法，该方法之后会最终调用到Camera Service中的CameraService::connectDevice方法，</p>
+<p>然后通过ICameraDevice::open()这一个HIDL接口通知Provider，然后在Provider内部又通过调用之前获取的camera_module_t中methods的open方法来获取一个Camera 设备，</p>
+<p>对应于HAL中的camera3_device_t结构体，紧接着，在Provider中会继续调用获取到的camera3_device_t的initialize方法进行初始化动作。</p>
+<p>接下来我们便来详细分析下<strong>CamX-CHI对于open以及initialize的具体实现流程</strong>：</p>
+<h3 id="a-open"><a class="markdownIt-Anchor" href="#a-open"></a> a) open</h3>
+<p>（1）该方法是camera_module_t的标准方法，主要<strong>用来获取camera3_device_t设备结构体的</strong>，CamX-CHI对其进行了实现，open方法中完成的工作主要有以下几个：</p>
+<ol>
+<li>
+<p><code>将当前camera id传入CHI中进行remap操作，当然这个remap操作逻辑完全是根据CHI中用户需求来的，</code></p>
+<ol>
+<li><code>用户可以根据自己的需要在CHI中加入自定义remap逻辑。</code></li>
+</ol>
+</li>
+<li>
+<p><code>实例化HALDevice对象，其构造函数中调用Initialize方法，</code></p>
+<ol>
+<li><code>该方法会填充CamX中自定义的Camera3Device结构体。</code></li>
+</ol>
+</li>
+<li>
+<p><code>将m_HALCallbacks.process_capture_result指向了本地方法ProcessCaptureResult</code></p>
+<ol>
+<li>
+<p><code>以及m_HALCallbacks.notify_result指向了本地方法Notify</code></p>
+</li>
+<li>
+<p><code>（之后会在配置数据流的过程中，将m_HALCallbacks注册到CHI中， 一旦当CHI数据处理完成之后，</code></p>
+</li>
+<li>
+<p><code>便会通过这两个回调方法将数据或者事件回传给CamX）。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>最后将HALDevice 中的Camera3Device成员变量作为返回值给到Provider中的CameraCaptureSession中。</code></p>
+</li>
+</ol>
+<p>（2）Camera3Device 其实重定义了camera3_device_t，</p>
+<p>=》其中HwDevice对应于camera3_device_t中的hw_device_t，</p>
+<p>=》Camera3DeviceOps对应于camera3_device_ops_t，</p>
+<p>而在HALDevice的初始化过程中，会将CamX实现的HAL3接口的结构体g_camera3DeviceOps赋值给Camera3DeviceOps中。</p>
+<h3 id="b-initialize"><a class="markdownIt-Anchor" href="#b-initialize"></a> b) initialize</h3>
+<p>（1）该方法在调用open后紧接着被调用，主要用于将上层的回调接口传入HAL中，一旦有数据或者事件产生，CamX便会通过这些回调接口将数据或者事件上传至调用者，其内部的实现较为简单。</p>
+<p>（2）initialize方法中有两个参数，分别是之前通过open方法获取的camera3_device_t结构体和实现了camera3_callback_ops_t的CameraDevice，</p>
+<p>（3）很显然camera3_device_t结构体并不是重点，所以该方法的主要工作是将camera3_callback_ops_t与CamX关联上，一旦数据准备完成便通过这里camera3_callback_ops_t中回调方法将数据回传到Camera Provider中的CameraDevice中，基本流程可以总结为以下几点：</p>
+<ol>
+<li>
+<p><code>实例化了一个Camera3CbOpsRedirect对象并将其加入了g_HAL3Entry.m_cbOpsList队列中，</code></p>
+<ol>
+<li><code>这样方便之后需要的时候能够顺利拿到该对象。</code></li>
+</ol>
+</li>
+<li>
+<p><code>将本地的process_capture_result以及notify方法地址分别赋值给</code></p>
+<ol>
+<li><code>Camera3CbOpsRedirect.cbOps中的process_capture_result以及notify函数指针。</code></li>
+</ol>
+</li>
+<li>
+<p><code>将上层传入的回调方法结构体指针pCamera3CbOpsAPI赋值给Camera3CbOpsRedirect.pCbOpsAPI，</code></p>
+<ol>
+<li>
+<p><code>并将Camera3CbOpsRedirect.cbOps赋值给pCamera3CbOpsAPI，</code></p>
+</li>
+<li>
+<p><code>通过JumpTableHal3的initialize方法将pCamera3CbOpsAPI传给HALDevice中的</code></p>
+</li>
+<li>
+<p><code>m_pCamera3CbOps成员变量，这样HALDevice中的m_pCamera3CbOps就指向了</code></p>
+</li>
+<li>
+<p><code>CamX中本地方法process_capture_result以及notify。</code></p>
+</li>
+</ol>
+</li>
+</ol>
+<p>（4）经过这样的一番操作之后，</p>
+<p>=》一旦CHI有数据传入便会首先进入到本地方法ProcessCaptureResult，</p>
+<p>=》然后在该方法中获取到HALDevice的成员变量m_pCamera3CbOps，进而调用m_pCamera3CbOps中的process_capture_result方法，即camxhal3entry.cpp中定义的process_capture_result方法，</p>
+<p>=》然后这个方法中会去调用JumpTableHAL3.process_capture_result方法，该方法最终会去调用Camera3CbOpsRedirect.pCbOpsAPI中的process_capture_result方法，</p>
+<p>=》这样就调到从Provider传入的回调方法，将数据顺利给到了CameraCaptureSession中。</p>
+<h2 id="43-配置相机设备数据流"><a class="markdownIt-Anchor" href="#43-配置相机设备数据流"></a> 4.3. 配置相机设备数据流</h2>
+<h3 id="431-配置流程概要"><a class="markdownIt-Anchor" href="#431-配置流程概要"></a> 4.3.1 配置流程概要</h3>
+<p>1）在打开相机应用过程中，App在获取并打开相机设备之后，会调用CameraDevice.createCaptureSession来获取CameraDeviceSession，</p>
+<p>2）并且通过Camera api v2标准接口，通知Camera Service，调用其CameraDeviceClient.endConfigure方法，在该方法内部又会去通过HIDL接口ICameraDeviceSession::configureStreams_3_4通知Provider开始处理此次配置需求，</p>
+<p>3）在Provider内部，会去通过在调用open流程中获取的camera3_device_t结构体的configure_streams方法来将数据流的配置传入CamX-CHI中，</p>
+<p>4）之后由CamX-CHI完成对数据流的配置工作，</p>
+<h3 id="432-hal3接口-configure_streams的具体实现"><a class="markdownIt-Anchor" href="#432-hal3接口-configure_streams的具体实现"></a> 4.3.2 HAL3接口 configure_streams的具体实现</h3>
+<p>接下来我们来详细分析下CamX-CHI对于该标准HAL3接口 configure_streams的具体实现：</p>
+<p>配置数据流是整个CamX-CHI流程比较重要的一环，其中主要包括两个阶段：</p>
+<ol>
+<li>
+<p><code>选择UsecaseId</code></p>
+</li>
+<li>
+<p><code>根据选择的UsecaseId创建Usecase</code></p>
+</li>
+</ol>
+<p>接下来我们就这两个阶段分别进行详细介绍:</p>
+<h4 id="a-选择usecaseid"><a class="markdownIt-Anchor" href="#a-选择usecaseid"></a> a) 选择UsecaseId</h4>
+<p>（1）不同的UsecaseId分别对应的不同的应用场景，该阶段是通过调用UsecaseSelector::GetMatchingUsecase()方法来实现的，</p>
+<p>（2）该函数中通过传入的operation_mode、num_streams配置数据流数量以及当前使用的Sensor个数来选择相应的UsecaseId，</p>
+<p>（3）比如当numPhysicalCameras值大于1同时配置的数据流数量num_streams大于1时选择的就是UsecaseId::MultiCamera，表示当前采用的是双摄场景。</p>
+<h4 id="b-创建usecase"><a class="markdownIt-Anchor" href="#b-创建usecase"></a> b) 创建Usecase</h4>
+<p>（1）根据之前选择的UsecaseId，通过UsecaseFactory来创建相应的Usecase，</p>
+<p>（2）其中Class Usecase是所有Usecase的基类，其中定义并实现了一些通用接口，CameraUsecaseBase继承于Usecase，并扩展了部分功能。</p>
+<p>（3）AdvancedCameraUsecase又继承于CameraUsecaseBase，作为主要负责大部分场景的Usecase实现类，</p>
+<p>（4）另外对于多摄场景，现提供了继承于AdvancedCameraUsecase的UsecaseMultiCamera来负责实现。</p>
+<p>（5）除了双摄场景，其它大部分场景使用的都是AdvancedCameraUsecase类来管理各项资源的，接下来我们重点梳理下AdvancedCameraUsecase::Create()方法。</p>
+<h3 id="432-advancedcamerausecasecreate"><a class="markdownIt-Anchor" href="#432-advancedcamerausecasecreate"></a> 4.3.2 AdvancedCameraUsecase::Create()</h3>
+<h4 id="create的几个阶段"><a class="markdownIt-Anchor" href="#create的几个阶段"></a> Create的几个阶段</h4>
+<p>（1）在AdvancedCameraUsecase::Create方法中做了很多初始化操作，其中包括了以下几个阶段：</p>
+<ol>
+<li>
+<p><code>获取XML文件中Usecase配置信息</code></p>
+</li>
+<li>
+<p><code>创建Feature</code></p>
+</li>
+<li>
+<p><code>保存数据流，重建Usecase的配置信息</code></p>
+</li>
+<li>
+<p><code>调用父类CameraUsecaseBase的initialize方法，进行一些常规初始化工作</code></p>
+</li>
+</ol>
+<p>接下来我们就这几个阶段逐一进行分析：</p>
+<h4 id="1-获取xml文件中usecase配置信息"><a class="markdownIt-Anchor" href="#1-获取xml文件中usecase配置信息"></a> <strong>1. 获取XML文件中Usecase配置信息</strong></h4>
+<p>1）这一部分主要通过调用CameraUsecaseBase::GetXMLUsecaseByName方法进行实现。<br />
+2）该方法的主要操作是从PerNumTargetUsecases数组中找到匹配到给定的usecaseName的Usecase，并作为返回值返回给调用者，</p>
+<p>3）其中这里我们以&quot;UsecaseZSL“为例进行分析，PerNumTargetUsecases的定义是在g_pipeline.h中，该文件是在编译过程中通过usecaseconverter.pl脚本将定义在个平台目录下的common_usecase.xml中的内容转换生成g_pipeline.h。</p>
+<h4 id="2-创建feature"><a class="markdownIt-Anchor" href="#2-创建feature"></a> <strong>2. 创建Feature</strong></h4>
+<p>1）如果当前场景选取了Feature，则调用FeatureSetup来完成创建工作。<br />
+2）该方法主要是通过诸如operation_mode、camera数量以及UsecaseId等信息来决定需要选择哪些Feature,具体逻辑比较清晰，一旦决定需要使用哪一个Feature之后，便调用相应的Feature的Create()方法进行初始化操作。</p>
+<h4 id="3-保存数据流重建usecase的配置信息"><a class="markdownIt-Anchor" href="#3-保存数据流重建usecase的配置信息"></a> <strong>3. 保存数据流，重建Usecase的配置信息</strong></h4>
+<p>1）从Camera Service 传入的<strong>数据流</strong>，需要将其存储下来，供后续使用，</p>
+<p>2）同时高通针对Usecase也加入了Override机制，根据需要可以选择性地扩展Usecase，这两个步骤的实现主要是通过SelectUsecaseConfig方法来实现。</p>
+<p>3）其中主要是调用以下两个方法来实现的：</p>
+<ol>
+<li>
+<p><code>ConfigureStream： 该方法将从上层配置的数据流指针存入AdvancedCameraUsecase中，</code></p>
+<ol>
+<li><code>其中包括了用于预览的m_pPreviewStream以及用于拍照的m_pSnapshotStream。</code></li>
+</ol>
+</li>
+<li>
+<p><code>BuildUsecase： 这个方法用来重新在原有的Usecase上面加入了Feature中所需要的pipeline，</code></p>
+<ol>
+<li>
+<p><code>并创建了一个新的Usecase，并将其存入AdvancedCameraUsecase中的m_pChiUsecase成员变量中，</code></p>
+</li>
+<li>
+<p><code>紧接着通过SetPipelineToSessionMapping方法将pipeline与Session进行关联。</code></p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="4-调用父类camerausecasebase的initialize方法进行一些常规初始化工作"><a class="markdownIt-Anchor" href="#4-调用父类camerausecasebase的initialize方法进行一些常规初始化工作"></a> <strong>4. 调用父类CameraUsecaseBase的initialize方法，进行一些常规初始化工作</strong></h4>
+<p>该方法中的操作主要有以下三个：</p>
+<ol>
+<li>
+<p><code>设置Session回调</code></p>
+</li>
+<li>
+<p><code>创建Pipeline</code></p>
+</li>
+<li>
+<p><code>创建Session</code></p>
+</li>
+</ol>
+<p><strong>（1）设置Session回调</strong></p>
+<p>该方法有两个参数，第二个是缺省的，第一个是ChiCallBacks，该参数是作为创建的每一条Session的回调方法，当Session中的pipeline全部跑完之后，会回调该方法将数据投递到CHI中。</p>
+<p><strong>（2）创建Pipeline</strong><br />
+根据之前获取的pipeline信息开始创建每一条pipeline，通过调用CreatePipeline()方法实现。</p>
+<p><strong>（3）创建Session</strong><br />
+创建Session，通过CreateSession()方法实现，此时会将AdvancedCameraUsecase端的回调函数注册到Session中，一旦Session中数据处理完成，便会调用回调将数据回传给AdvancedCameraUsecase。</p>
+<h4 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h4>
+<p>综上，整个configure_stream过程，基本可以概括为以下几点：</p>
+<ol>
+<li><code>根据operation_mode、camera 个数以及stream的配置信息选取了对应的UsecaseId</code>；</li>
+<li><code>根据所选取的UsecaseId，使用UsecaseFactory简单工厂类创建了用于管理整个场景下所有资源的AdvancedCameraUsecase对象。</code></li>
+<li><code>创建AdvancedCameraUsecase对象是通过调用其Create()方法完成，该方法中获取了common_usecase.xml定义的关于Usecase的配置信息，之后又根据需要创建了Feature并选取了Feature所需的pipeline，并通过Override机制将Feature中所需要的Pipeline加入重建后的Usecase中。</code></li>
+<li><code>最后通过调用CameraUsecaseBaese的initialize方法依次创建了各个pipeline以及Session。并且将AdvancedCameraUsecase的成员方法注册到Session，用于Session将数据返回给Usecase中。</code></li>
+</ol>
+<h2 id="44-处理拍照请求"><a class="markdownIt-Anchor" href="#44-处理拍照请求"></a> 4.4. 处理拍照请求</h2>
+<h3 id="441-流程概要"><a class="markdownIt-Anchor" href="#441-流程概要"></a> 4.4.1 流程概要</h3>
+<p>（1）当用户打开相机应用进行预览或者点击一次拍照操作的时候，便触发了一次拍照请求，</p>
+<p>（2）该动作首先通过CameraDeviceSession的capture或者setRepeatingRequest方法将请求通过Camera api v2接口下发到Camera Service中，</p>
+<p>（3）然后在Camera Service内部将此次请求发送到CameraDevice::RequestThread线程中进行处理，一旦进入到该线程之后，便会最终通过HIDL接口ICameraCaptureSession:processCaptureRequest_3_4将请求发送至Provider中，</p>
+<p>（4）之后当Provider收到请求之后，会调用camera3_device_t结构体的process_capture_request开始了HAL针对此次Request的处理，</p>
+<p>（5）而该处理是由CamX-CHI来负责实现，</p>
+<h3 id="442-camx-chi-实现方法"><a class="markdownIt-Anchor" href="#442-camx-chi-实现方法"></a> 4.4.2 Camx-CHI 实现方法</h3>
+<h4 id="a-camx-chi-capture-request流转概览"><a class="markdownIt-Anchor" href="#a-camx-chi-capture-request流转概览"></a> A. CamX-CHI Capture request流转概览</h4>
+<p>现在我们就来看下CamX-CHI是如何实现该方法的：</p>
+<p>（1）首先CamX中会将此次request转发到HALDevice中，</p>
+<p>（2）再通过HALDevice对象调用之前初始化的时候获取的CHI部分的回调接口m_ChiAppCallbacks.chi_override_process_request方法（chi_override_process_request方法的定义位于chxextensioninterface.cpp中）将request发送到CHI部分。</p>
+<p>（3）在chi_override_process_request方法中会去获取ExtensionModule对象，并将request发送到ExtensionModule对象中，</p>
+<p>（4）该对象中存储了之前创建的Usecase对象，然后经过层层调用，最终会调用AdvancedCameraUsecase的ExecuteCaptureRequest方法，该方法负责处理此次Request，具体流程如下：</p>
+<p>在AdvancedCameraUsecase的ExecuteCaptureRequest中会有两个主要的分支来分别处理：</p>
+<ol>
+<li>
+<p><code>如果当前并没有任何Feature需要实现，此时便会走默认流程，根据上面的流程图所示，</code></p>
+<ol>
+<li>
+<p><code>这里会调用CameraUsecaseBase::ExecuteCaptureRequest方法，在该方法中，</code></p>
+</li>
+<li>
+<p><code>首先会将request取出，重新封装成CHICAPTUREREQUEST，</code></p>
+</li>
+<li>
+<p><code>然后调用CheckAndActivatePipeline方法唤醒pipeline,</code></p>
+</li>
+<li>
+<p><code>这一操作到最后会调到Session的StreamOn方法，在唤醒了pipeline之后，继续往下执行，</code></p>
+</li>
+<li>
+<p><code>再将封装后的Request发送到CamX中，最终调用到相应的Session::ProcessCaptureRequest方法，</code></p>
+</li>
+<li>
+<p><code>此时Request就进入到了Session内部进行流转了。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>如果当前场景需要实现某个Feature，则直接调用Feature的ExecuteProcessRequest方法</code></p>
+<ol>
+<li>
+<p><code>将此次request送入Feature中处理，最后依然会调用到Session::StreamOn</code></p>
+</li>
+<li>
+<p><code>以及Session::ProcessCaptureRequest方法来分别完成唤醒pipeline</code></p>
+</li>
+<li>
+<p><code>以及下发request的到Session的操作。</code></p>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="b-两个比较关键的方法"><a class="markdownIt-Anchor" href="#b-两个比较关键的方法"></a> B. 两个比较关键的方法</h4>
+<p>该流程最终都会调用到两个比较关键的方法Session::StreamOn以及Session::ProcessCaptureRequest，接下来针对这两个方法重点介绍下：</p>
+<h5 id="sessionstreamon"><a class="markdownIt-Anchor" href="#sessionstreamon"></a> Session::StreamOn</h5>
+<p>（1）从方法名称基本可以知道该方法主要用于开始硬件的数据输出，具体点儿就是进行配置Sensor寄存器，让其开始出图，</p>
+<p>（2）并且将当前的Session的状态告知每一Node，让它们在自己内部也做好处理数据的准备，</p>
+<p>（3）所以之后的相关Request的流转都是以该方法为前提进行的，所以该方法重要性可见一斑，其操作流程见下图：</p>
+<p>Session的StreamOn方法中主要做了如下两个工作：</p>
+<ol>
+<li>
+<p><code>调用FinalizeDeferPipeline()方法，如果当前pipeline并未初始化，则会调用pipeline的FinalizePipeline方法，这里方法里面会去针对每一个从属于当前pipeline的Node依次做FinalizeInitialization、CreateBufferManager、NotifyPipelineCreated以及PrepareNodeStreamOn操作，FinalizeInitialization用于完成Node的初始化动作，NotifyPipelineCreated用于通知Node当前Pipeline的状态，此时Node内部可以根据自身的需要作相应的操作，PrepareNodeStreamOn方法的主要是完成Sensor以及IFE等Node的控制硬件模块出图前的配置，其中包括了曝光的参数的设置，CreateBufferManagers方法涉及到CamX-CHI中的一个非常重要的Buffer管理机制，用于Node的ImageBufferManager的创建，而该类用于管理Node中的output port的buffer申请/流转/释放等操作。</code></p>
+</li>
+<li>
+<p><code>调用Pipeline的StreamOn方法，里面会进一步通知CSL部分开启数据流，并且调用每一个Node的OnNodeStreamOn方法，该方法会去调用ImageBufferManager的Activate(),该方法里面会去真正分配用于装载图像数据的buffer，之后会去调用CHI部分实现的用户自定义的Node的pOnStreamOn方法，用户可以在该方法中做一些自定义的操作。</code></p>
+</li>
+</ol>
+<h5 id="sessionprocesscapturerequest"><a class="markdownIt-Anchor" href="#sessionprocesscapturerequest"></a> Session::ProcessCaptureRequest</h5>
+<p>（1）针对每一次的Request的流转，都是以该方法为入口开始的，具体流程见下图：<br />
+<img src="40bd4a7ea1f66f2fce93e9f4a6432a9b.png" alt="" /><br />
+（2）上述流程可以总结为以下几个步骤：</p>
+<ol>
+<li>
+<p><code>通过调用Session的ProcessCaptureRequest方法进入到Session，然后调用Pipeline中的</code></p>
+<ol>
+<li><code>ProcessRequest方法通知Pipeline开始处理此次Request。</code></li>
+</ol>
+</li>
+<li>
+<p><code>在Pipeline中，会先去调用内部的每一个Node的SetupRequest方法分别设置该Node的Output Port</code></p>
+<ol>
+<li>
+<p><code>以及Input Port，之后通过调用**DRQ(DeferredRequestQueue)**的AddDeferredNode方法将所有的``Node加入到DRQ中，其中DRQ中有两个队列分别是用于保存没有依赖项的Node的m_readyNodes``以及保存处于等待依赖关系满足的Node的m_deferredNodes，</code></p>
+</li>
+<li>
+<p><code>当调用DRQ的DispatchReadyNodes方法后，``会开始从m_readyNodes队列中取出Node调用其ProcessRequest开始进入Node内部处理本次request，</code></p>
+</li>
+<li>
+<p><code>在处理过程中会更新meta data数据，并更新至DRQ中，当该Node处理完成之后，``会将处于m_deferredNodes中的已无依赖关系的Node移到m_readyNodes中，</code></p>
+</li>
+<li>
+<p><code>并再次调用DispatchReadyNodes方法从m_readyNodes取出Node进行处理。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>与此过程中，当Node的数据处理完成之后会通过CSLFenceCallback通知到Pipeline，</code></p>
+<ol>
+<li>
+<p><code>此时Pipeline会判断当前Node的Output port 是否是Sink Port(输出到CHI)，</code></p>
+</li>
+<li>
+<p><code>如果不是，则会更新依赖项到DRQ中，并且将不存在依赖项的Node移到m_readyNodes队列中，然后调用DispatchReadyNdoes继续进入到DRQ中流转，</code></p>
+</li>
+<li>
+<p><code>如果是Sink Port，则表示此Node是整个Pipeline的最末端，调用sinkPortFenceSignaled将数据给到Session中，</code></p>
+</li>
+<li>
+<p><code>最后通过调用Session中的NotifyResult将结果发送到CHI中。</code></p>
+</li>
+</ol>
+</li>
+</ol>
+<h5 id="deferredrequestqueue"><a class="markdownIt-Anchor" href="#deferredrequestqueue"></a> DeferredRequestQueue</h5>
+<p>上述流程里面中涉及到DeferredRequestQueue这个概念，这里简单介绍下：</p>
+<h6 id="1-作用"><a class="markdownIt-Anchor" href="#1-作用"></a> 1. 作用</h6>
+<p>DeferredRequestQueue继承于IPropertyPoolObserver，实现了OnPropertyUpdate/OnMetadataUpdate/OnPropertyFailure/OnMetadataFailure接口，这几个接口用于接收Meta Data以及Property的更新，Deferred的中文翻译是“延迟的”，通常用于描述异步编程中的回调函数。在异步编程中，Deferred对象表示一个异步操作的结果，它可以包含一个成功的结果、一个失败的异常或者一个被取消的状态。当异步操作完成后，Twisted会将结果传递给Deferred对象的回调函数进行处理。因此，Deferred可以被理解为“延迟的”回调函数，它可以在异步操作完成后被调用，从而实现异步编程的效果。（延迟、依赖）</p>
+<h6 id="2-方法"><a class="markdownIt-Anchor" href="#2-方法"></a> 2. 方法</h6>
+<p>另外，DRQ主要包含了以下几个主要方法:</p>
+<ol>
+<li>
+<p><code>Create()</code></p>
+<ol>
+<li>
+<p><code>该方法用于创建DRQ，其中创建了用于存储依赖信息的m_pDependencyMap，</code></p>
+</li>
+<li>
+<p><code>并将自己注册到MetadataPool中，一旦有meta data或者property更新便会通过类中实现的几个接口通知到DRQ。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>DispatchReadyNodes()</code></p>
+<ol>
+<li><code>该方法主要用于将处于m_readyNodes队列的Node取出，将其投递到m_hDeferredWorker线程中进行处理。</code></li>
+</ol>
+</li>
+<li>
+<p><code>AddDeferredNode()</code></p>
+<ol>
+<li><code>该方法主要用于添加依赖项到m_pDependencyMap中。</code></li>
+</ol>
+</li>
+<li>
+<p><code>FenceSignaledCallback()</code></p>
+<ol>
+<li>
+<p><code>当Node内部针对某次request处理完成之后，会通过一系列回调通知到DRQ，而其调用的方法便是该方法，</code></p>
+</li>
+<li>
+<p><code>在该方法中，会首先调用UpdateDependency更新依赖项，</code></p>
+</li>
+<li>
+<p><code>然后调用DispatchReadyNodes触发开始对处于ready状态的Node开始进行处理</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>OnPropertyUpdate()</code></p>
+<ol>
+<li>
+<p><code>该方法是定义于IPropertyPoolObserver接口，DRQ实现了它，主要用于接收Property更新的通知，</code></p>
+</li>
+<li>
+<p><code>并在内部调用UpdateDependency更新依赖项。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>OnMetadataUpdate()</code></p>
+<ol>
+<li>
+<p><code>该方法是定义于IPropertyPoolObserver接口，DRQ实现了它，主要用于接收Meta data更新的通知，</code></p>
+</li>
+<li>
+<p><code>并在内部调用UpdateDependency更新依赖项。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>UpdateDependency()</code></p>
+<ol>
+<li>
+<p><code>该方法用于更新Node的依赖项信息，并且将没有依赖的Node从m_deferredNodes队列中</code></p>
+</li>
+<li>
+<p><code>移到m_readyNodes，这样该Node就可以在之后的某次DispatchReadyNodes调用之后投入运行。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>DeferredWorkerWrapper()</code></p>
+<ol>
+<li>
+<p><code>该方法是m_hDeferredWorker线程的处理函数，主要用于处理需要下发request的Node，</code></p>
+</li>
+<li>
+<p><code>同时再次更新依赖项，最后会再次调用DispatchReadyNodes开始处理。</code></p>
+</li>
+</ol>
+</li>
+</ol>
+<h6 id="3-流程"><a class="markdownIt-Anchor" href="#3-流程"></a> 3. 流程</h6>
+<p>其中需要注意的是，Pipeline首次针对每一个Node通过调用AddDeferredNode方法加入到DRQ中，此时所有的Node都会加入到m_readyNodes中，然后通过调用dispatchReadyNodes方法，触发DRQ开始进行整个内部处理流程，基本流程可以参见下图，接下来就以该图进行深入梳理下：</p>
+<ol>
+<li>
+<p><code>当调用了DRQ的dispatchReadyNodes方法后，会从m_readyNodes链表里面依次取出Dependency，</code></p>
+<ol>
+<li>
+<p><code>将其投递到DeferredWorkerWrapper线程中，在该线程会从Dependency取出Node调用</code></p>
+</li>
+<li>
+<p><code>其ProcessRequest方法开始在Node内部处理本次request，处理完成之后如果当前Node依然存在依赖项，</code></p>
+</li>
+<li>
+<p><code>则调用AddDeferredNode方法将Node再次加入到m_deferredNodes链表中，</code></p>
+</li>
+<li>
+<p><code>并且加入新的依赖项，存入m_pDependencyMap hash表中。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>在Node处理request的过程中，会持续更新meta data以及property，</code></p>
+<ol>
+<li>
+<p><code>此时会通过调用MetadataSlot的PublishMetadata方法更新到MetadataPool中，</code></p>
+</li>
+<li>
+<p><code>此时MetadataPool会调用之前在DRQ初始化时候注册的几个回调方法OnPropertyUpdate</code></p>
+</li>
+<li>
+<p><code>以及OnMetadataUpdate方法通知DRQ，此时有新的meta data 和property更新，</code></p>
+</li>
+<li>
+<p><code>接下来会在这两个方法中调用UpdateDependency方法，去更新meta data</code></p>
+</li>
+<li>
+<p><code>和property到m_pDependencyMap中，并且将没有任何依赖项的Node从m_deferredNodes</code></p>
+</li>
+<li>
+<p><code>取出加入到m_readyNodes，等待处理。</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>与此同时，Node的处理结果也会通过ProcessFenceCallback方法通知pipeline，</code></p>
+<ol>
+<li>
+<p><code>并且调用pipeline的NonSinkPortFenceSignaled方法，在该方法内部又会去</code></p>
+</li>
+<li>
+<p><code>调用DRQ的FenceSignaledCallback方法，而该方法又会调用UpdateDependency更新依赖，</code></p>
+</li>
+<li>
+<p><code>并将依赖项都满足的Node从m_deferredNodes取出加入到m_readyNodes，</code></p>
+</li>
+<li>
+<p><code>然后调用dispatchReadyNodes继续进行处理。</code></p>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="45-上传拍照结果"><a class="markdownIt-Anchor" href="#45-上传拍照结果"></a> 4.5. 上传拍照结果</h2>
+<h3 id="451-流程概要"><a class="markdownIt-Anchor" href="#451-流程概要"></a> 4.5.1 流程概要</h3>
+<p>（1）在用户开启了相机应用，相机框架收到某次Request请求之后会开始对其进行处理，</p>
+<p>（2）一旦有图像数据产生便会通过层层回调最终返回到应用层进行显示，这里我们针对CamX-CHI部分对于拍照结果的上传流程进行一个简单的梳理：</p>
+<h3 id="452-result上传过程"><a class="markdownIt-Anchor" href="#452-result上传过程"></a> 4.5.2 Result上传过程</h3>
+<p>每一个Request对应了三个Result，分别是partial metadata、metadata以及image data，对于每一个Result，上传过程可以大致分为以下两个阶段：</p>
+<ol>
+<li>
+<p><code>Session内部完成图像数据的处理，将结果发送至Usecase中</code></p>
+</li>
+<li>
+<p><code>Usecase接收到来自Session的数据，并将其上传至Provider</code></p>
+</li>
+</ol>
+<h4 id="a-session-usecase流程"><a class="markdownIt-Anchor" href="#a-session-usecase流程"></a> <code>A. Session-&gt;Usecase流程</code></h4>
+<p>（1）首先来看下Session内部完成图像数据的处理后是如何将结果发送至Usecase的：</p>
+<p><img src="c599adda3c9c902547a2b4e129434f89.png" alt="" /></p>
+<p><strong>Partial Meta Data</strong></p>
+<p>（2）在整个requets流转的过程中，一旦Node中有P<strong>artial Meta Data</strong>产生，便会调用Node的ProcessPartialMetadataDone方法去通知从属的Pipeline，其内部又调用了pipeline的NotifyNodePartialMetadataDone方法。</p>
+<p>（3）每次调用Pipeline的NotifyNodePartialMetadataDone方法都会去将pPerRequestInfo→numNodesPartialMetadataDone加一并且判断当前值是否等于pipeline中的Node数量，一旦相等，便说明当前所有的Node都完成了partial meta data的更新动作，</p>
+<p>（4）此时，便会调用ProcessPartialMetadataRequestIdDone方法，里面会去取出partial meta data，并且重新封装成ResultsData结构体，将其作为参数通过Session的NotifyResult方法传入Session中，</p>
+<p>（5）之后在Session中经过层层调用最终会调用到内部成员变量m_chiCallBacks的ChiProcessPartialCaptureResult方法，该方法正是创建Session的时候，传入Session中的Usecase的方法（AdvancedCameraUsecase::ProcessDriverPartialCaptureResultCb），通过该方法就将meta data返回到了CHI中。</p>
+<p><strong>Meta data的逻辑</strong></p>
+<p>（6）同样地，<strong>Meta data的逻辑</strong>和Partial Meta Data很相似，每个Node在处理request的过程中，会调用ProcessMetadataDone方法将数据发送到Pipeline中，</p>
+<p>（7）一旦所有的Node的meta data否发送完成了，pipeline会调用NotifyNodeMetadataDone方法，将最终的结果发送至Session中，</p>
+<p>（8）最后经过层层调用，会调用Session 中成员变量m_chiCallBacks的ChiProcessCaptureResult方法，将结果发送到CHI中Usecase中。</p>
+<p><strong>图像数据的流转和前两个meta data的流转差异</strong></p>
+<p>（9）图像数据的流转和前两个meta data的流转有点儿差异，一旦Node内部图像数据处理完成后便会调用其ProcessFenceCallback方法，</p>
+<p>（10）在该方法中会去检查当前输出是否是SInk Buffer，如果是则会调用Pipeline的SinkPortFenceSignaled方法将数据发送到Pipeline中，</p>
+<p>（11）在该方法中Pipeline又会将数据发送至Session中，最后经过层层调用，会调用Session 中成员变量m_chiCallBacks的<strong>ChiProcessCaptureResult</strong>方法，将结果发送到CHI中Usecase中。</p>
+<h4 id="b-usecase-provider流程"><a class="markdownIt-Anchor" href="#b-usecase-provider流程"></a> <code>B. Usecase-&gt;Provider流程</code></h4>
+<p>接下来我们来看下一旦Usecase接收到Session的数据，是如何发送至Provider的：</p>
+<p>我们以常用的AdvancedCameraUsecase为例进行代码的梳理：</p>
+<p><img src="750660c6efe80094bc69a4a384248641.png" alt="" /></p>
+<p>如上图所示，整个result的流转逻辑还是比较清晰的，CamX通过回调方法将结果回传给CHI中，而在CHI中，</p>
+<p>（1）首先判断是否需要发送到具体的Feature的， 如果需要，则调用相应Feature的ProcessDriverPartialCaptureResult或者ProcessResult方法将结果发送到具体的Feature中，</p>
+<p>（2）一旦处理完成，便会调用调用CameraUsecaseBase的ProcessAndReturnPartialMetadataFinishedResults以及ProcessAndReturnFinishedResults方法将结果发送到Usecase中，</p>
+<p>（3）如果当前不需要发送到Feature进行处理，就在AdvancedCameraUsecase中调用CameraUsecaseBase的SessionCbPartialCaptureResult以及SessionCbCaptureResult方法，</p>
+<p>（4）然后通过Usecase::ReturnFrameResult方法将结果发送到ExtensionModule中，</p>
+<p>（5）之后调用ExtensionModule中存储的CamX中的回调函数process_capture_result将结果发送到CamX中的HALDevice中，</p>
+<p>（6）之后HALDevice又通过之前存储的上层传入的回调方法，将结果最终发送到CameraDeviceSession中。</p>
+<h1 id="五-总结"><a class="markdownIt-Anchor" href="#五-总结"></a> 五、总结</h1>
+<p>（1）通过以上的梳理，可以发现，整个CamX-CHI框架设计的很不错，目录结构清晰明确，框架简单高效，流程控制逻辑分明，</p>
+<p>（2）比如针对某一图像请求，整个流程经过Usecase、Feature、Session、Pipeline并且给到具体的Node中进行处理，最终输出结果。</p>
+<p>（3）另外，相比较之前的QCamera &amp; Mm-Camera框架的针对某个算法的扩展需要在整个流程代码中嵌入自定义的修改做法而言，CamX-CHI通过将自定义实现的放入CHI中，提高了其扩展性，降低了开发门槛，使得平台厂商在并不是很熟悉CamX框架的情况下也可以通过小规模的修改成功添加新功能。</p>
+<p>（4）但是人无完人，框架也是一样，该框架异步化处理太多，加大了定位问题以及解决问题的难度，给开发者带来了不小的压力</p>
+<p>（5）另外，框架对于内存的要求较高，所以在一些低端机型尤其是低内存机型上，整个框架的运行效率可能会受到一定的限制，进而导致相机效率低于预期。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2732168838/" rel="prev" title="我的到手工资到底是多少？">
+                  <i class="fa fa-angle-left"></i> 我的到手工资到底是多少？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/3175180471/" rel="next" title="四足机器人MPC控制算法编写仿真">
+                  四足机器人MPC控制算法编写仿真 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-solid fa-palette"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Momaoto</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">89k</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user-group"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="190,190,190" opacity="0.8" zIndex="-1" count="100" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

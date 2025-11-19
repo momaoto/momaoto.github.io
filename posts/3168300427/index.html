@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"momaoto.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"auto","version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"profile":{"enable":true,"tagline":"XJTU -> THU"}},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="环境  1. ERROR: Could not build wheels for opencv-python which use PEP 517 and cannot be installed directly 安装opencv-python时出现，伴随scikit-build could not get a working generator for your system. Aborting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置CUDA-Pytorch全家桶问题记录">
+<meta property="og:url" content="https://momaoto.github.io/posts/3168300427/index.html">
+<meta property="og:site_name" content="momaoto&#39;s blog">
+<meta property="og:description" content="环境  1. ERROR: Could not build wheels for opencv-python which use PEP 517 and cannot be installed directly 安装opencv-python时出现，伴随scikit-build could not get a working generator for your system. Aborting">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://momaoto.github.io/posts/3168300427/%E9%85%8D%E7%BD%AECUDA-Pytorch%E5%85%A8%E5%AE%B6%E6%A1%B6%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/3168300427/%E9%85%8D%E7%BD%AECUDA-Pytorch%E5%85%A8%E5%AE%B6%E6%A1%B6%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95_2025011933.png">
+<meta property="og:image" content="https://momaoto.github.io/posts/3168300427/%E9%85%8D%E7%BD%AECUDA-Pytorch%E5%85%A8%E5%AE%B6%E6%A1%B6%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95_2025011922.png">
+<meta property="article:published_time" content="2025-01-16T06:36:00.000Z">
+<meta property="article:modified_time" content="2025-10-30T08:51:36.883Z">
+<meta property="article:author" content="Momaoto">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://momaoto.github.io/posts/3168300427/%E9%85%8D%E7%BD%AECUDA-Pytorch%E5%85%A8%E5%AE%B6%E6%A1%B6%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95.png">
+
+
+<link rel="canonical" href="https://momaoto.github.io/posts/3168300427/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://momaoto.github.io/posts/3168300427/","path":"posts/3168300427/","title":"配置CUDA-Pytorch全家桶问题记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>配置CUDA-Pytorch全家桶问题记录 | momaoto's blog</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/callout_blocks.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">momaoto's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-list fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-inbox fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text"> 环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-error-could-not-build-wheels-for-opencv-python-which-use-pep-517-and-cannot-be-installed-directly"><span class="nav-number">1.1.</span> <span class="nav-text"> 1. ERROR: Could not build wheels for opencv-python which use PEP 517 and cannot be installed directly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-building-wheel-for-pyglm-pyprojecttoml-error"><span class="nav-number">1.2.</span> <span class="nav-text"> 2. Building wheel for PyGlm (pyproject.toml) … error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-no-cuda-runtime-is-found-using-cuda_homecprogram-filesnvidia-gpu-computing-toolkitcudav118"><span class="nav-number">1.3.</span> <span class="nav-text"> 3.   No CUDA runtime is found, using CUDA_HOME&#x3D;‘C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-running-setuppy-install-for-diff-gaussian-rasterization-error"><span class="nav-number">1.4.</span> <span class="nav-text"> 4.   Running setup.py install for diff-gaussian-rasterization … error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-userwarning-attempted-to-use-ninja-as-the-buildextension-backend-but-we-could-not-find-ninja-falling-back-to-using-the-slow-distutils-backend"><span class="nav-number">1.5.</span> <span class="nav-text"> 5. UserWarning: Attempted to use ninja as the BuildExtension backend but we could not find ninja… Falling back to using the slow distutils backend.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-unsupported-microsoft-visual-studio-version-only-the-versions-between-2017-and-2022"><span class="nav-number">1.6.</span> <span class="nav-text"> 6.  unsupported Microsoft Visual Studio version! Only the versions between 2017 and 2022</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-unable-to-register-cudnn-factory-attempting-to-register-factory-for-plugin-cudnn-when-one-has-already-been-registered"><span class="nav-number">1.7.</span> <span class="nav-text"> 7.  Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-userwarning-error-checking-compiler-version-for-cl-winerror-2-%E7%B3%BB%E7%BB%9F%E6%89%BE%E4%B8%8D%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E6%96%87%E4%BB%B6"><span class="nav-number">1.8.</span> <span class="nav-text"> 8. UserWarning: Error checking compiler version for cl: WinError 2 系统找不到指定的文件。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-attributeerror-module-torchlibrary-has-no-attribute-register_fake"><span class="nav-number">1.9.</span> <span class="nav-text"> 9. AttributeError: module ‘torch.library’ has no attribute ‘register_fake’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E7%BB%88%E7%AB%AF%E4%B8%AD%E8%BF%90%E8%A1%8C-conda-install-%E5%91%BD%E4%BB%A4%E5%90%8E%E4%B8%80%E7%9B%B4%E5%8D%A1%E5%9C%A8solving-environment"><span class="nav-number">1.10.</span> <span class="nav-text"> 10. 终端中运行 conda install 命令后一直卡在Solving environment:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text"> 代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-error-too-few-arguments-for-template-template-parameter-tuple"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. error : too few arguments for template template parameter Tuple</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">2.2.</span> <span class="nav-text"> 解决方案：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-attributeerror-module-time-has-no-attribute-clock"><span class="nav-number">2.3.</span> <span class="nav-text"> 2. AttributeError module ‘time‘ has no attribute ‘clock‘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-osmkdir%E6%97%B6%E5%87%BA%E7%8E%B0filenotfounderror-%E7%B3%BB%E7%BB%9F%E6%89%BE%E4%B8%8D%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E8%B7%AF%E5%BE%84"><span class="nav-number">2.4.</span> <span class="nav-text"> 3. os.mkdir()时出现FileNotFoundError:  系统找不到指定的路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-runtimeerror-program-ffmpeg-is-not-found-perhaps-install-ffmpeg-using-apt-install-ffmpeg"><span class="nav-number">2.5.</span> <span class="nav-text"> 4. RuntimeError: Program ‘ffmpeg’ is not found; perhaps install ffmpeg using ‘apt install ffmpeg’.</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rdk-x5%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text"> RDK X5配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-rdk-studio%E6%B7%BB%E5%8A%A0%E8%AE%BE%E5%A4%87%E5%90%8E%E6%8C%89%E6%95%99%E7%A8%8B%E6%97%A0%E6%B3%95%E8%BF%9E%E6%8E%A5wifi"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. RDK Studio添加设备后按教程无法连接wifi</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cuda%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text"> cuda配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#linux%E7%B3%BB%E7%BB%9F%E4%B8%ADcuda%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text"> linux系统中cuda的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B8%E8%BD%BDcuda"><span class="nav-number">4.2.</span> <span class="nav-text"> 卸载cuda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9Acuda%E7%89%88%E6%9C%AC"><span class="nav-number">4.3.</span> <span class="nav-text"> 指定cuda版本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#huggingface%E4%B8%8B%E8%BD%BD%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text"> huggingface下载模型</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Momaoto"
+      src="/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Momaoto</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/hekun.tian@qq.com" title="E-Mail → hekun.tian@qq.com" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://momaoto.github.io/posts/3168300427/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpg">
+      <meta itemprop="name" content="Momaoto">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="配置CUDA-Pytorch全家桶问题记录 | momaoto's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          配置CUDA-Pytorch全家桶问题记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-01-16 14:36:00" itemprop="dateCreated datePublished" datetime="2025-01-16T14:36:00+08:00">2025-01-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-30 16:51:36" itemprop="dateModified" datetime="2025-10-30T16:51:36+08:00">2025-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="环境"><a class="markdownIt-Anchor" href="#环境"></a> 环境</h1>
+<h2 id="1-error-could-not-build-wheels-for-opencv-python-which-use-pep-517-and-cannot-be-installed-directly"><a class="markdownIt-Anchor" href="#1-error-could-not-build-wheels-for-opencv-python-which-use-pep-517-and-cannot-be-installed-directly"></a> 1. ERROR: Could not build wheels for opencv-python which use PEP 517 and cannot be installed directly</h2>
+<p>安装opencv-python时出现，伴随scikit-build could not get a working generator for your system. Aborting build.<br />
+解决：升级pip到最新版即可<code>python -m pip install --upgrade pip</code></p>
+<span id="more"></span>
+<h2 id="2-building-wheel-for-pyglm-pyprojecttoml-error"><a class="markdownIt-Anchor" href="#2-building-wheel-for-pyglm-pyprojecttoml-error"></a> 2. Building wheel for PyGlm (pyproject.toml) … error</h2>
+<blockquote>
+<p>error: subprocess-exited-with-error<br />
+× Building wheel for PyGlm (pyproject.toml) did not run successfully.</p>
+</blockquote>
+<p>缺失了某些依赖模块，所以安装报错。<br />
+我的默认python版本是3.8，pyglm不支持了，换python版本到3.10解决。（直接把环境变量放最前面重新pip装一遍）</p>
+<h2 id="3-no-cuda-runtime-is-found-using-cuda_homecprogram-filesnvidia-gpu-computing-toolkitcudav118"><a class="markdownIt-Anchor" href="#3-no-cuda-runtime-is-found-using-cuda_homecprogram-filesnvidia-gpu-computing-toolkitcudav118"></a> 3.   No CUDA runtime is found, using CUDA_HOME=‘C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8’</h2>
+<p>检查cuda: cuda不可用(torch.cuda.is_available()返回false)<br />
+重建一个conda环境安装pytorch：<br />
+先<code>python -V</code>查看python版本，<br />
+再去pytorch官网复制下载链接安装pytorch；<br />
+如果有本地whl包：</p>
+<ol>
+<li><code>cd [whl位置]</code></li>
+<li><code>pip install torch-2.2.1+cu118-cp310-cp310-win_amd64.whl</code></li>
+</ol>
+<h2 id="4-running-setuppy-install-for-diff-gaussian-rasterization-error"><a class="markdownIt-Anchor" href="#4-running-setuppy-install-for-diff-gaussian-rasterization-error"></a> 4.   Running <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> install for diff-gaussian-rasterization … error</h2>
+<blockquote>
+<p>error: subprocess-exited-with-error<br />
+× Running <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> install for diff-gaussian-rasterization did not run successfully.</p>
+</blockquote>
+<p>原因就是上面的cuda没弄好，确保版本匹配。</p>
+<h2 id="5-userwarning-attempted-to-use-ninja-as-the-buildextension-backend-but-we-could-not-find-ninja-falling-back-to-using-the-slow-distutils-backend"><a class="markdownIt-Anchor" href="#5-userwarning-attempted-to-use-ninja-as-the-buildextension-backend-but-we-could-not-find-ninja-falling-back-to-using-the-slow-distutils-backend"></a> 5. UserWarning: Attempted to use ninja as the BuildExtension backend but we could not find ninja… Falling back to using the slow distutils backend.</h2>
+<p><code>pip install ninja</code></p>
+<h2 id="6-unsupported-microsoft-visual-studio-version-only-the-versions-between-2017-and-2022"><a class="markdownIt-Anchor" href="#6-unsupported-microsoft-visual-studio-version-only-the-versions-between-2017-and-2022"></a> 6.  unsupported Microsoft Visual Studio version! Only the versions between 2017 and 2022</h2>
+<p>解决方法：<br />
+进入-&gt;<code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include\crt</code><br />
+在<code>host_config.h</code>搜索</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> _MSC_VER <span class="string">&lt; 1910 || _MSC_VER &gt;</span>= 1930</span></span><br></pre></td></tr></table></figure>
+<p>修改为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> _MSC_VER <span class="string">&lt; 1910 || _MSC_VER &gt;</span>= 2030</span></span><br></pre></td></tr></table></figure>
+<h2 id="7-unable-to-register-cudnn-factory-attempting-to-register-factory-for-plugin-cudnn-when-one-has-already-been-registered"><a class="markdownIt-Anchor" href="#7-unable-to-register-cudnn-factory-attempting-to-register-factory-for-plugin-cudnn-when-one-has-already-been-registered"></a> 7.  Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered</h2>
+<p>服务器上运行Octo时遇到。</p>
+<h2 id="8-userwarning-error-checking-compiler-version-for-cl-winerror-2-系统找不到指定的文件"><a class="markdownIt-Anchor" href="#8-userwarning-error-checking-compiler-version-for-cl-winerror-2-系统找不到指定的文件"></a> 8. UserWarning: Error checking compiler version for cl: WinError 2 系统找不到指定的文件。</h2>
+<p>找不到cl.exe，这是一个类似编译器的东西，解决方法：先下载Visual Studio，再去安装目录找到附带的cl.exe，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.42.34433\bin\Hostx86\x86\cl.exe</span><br></pre></td></tr></table></figure>
+<p>把它所在位置加入系统环境变量，重启cmd输入：cl，有响应即成功。</p>
+<h2 id="9-attributeerror-module-torchlibrary-has-no-attribute-register_fake"><a class="markdownIt-Anchor" href="#9-attributeerror-module-torchlibrary-has-no-attribute-register_fake"></a> 9. AttributeError: module ‘torch.library’ has no attribute ‘register_fake’</h2>
+<p>原因：由于torch版本过高或者torchvision版本过低导致的不匹配。<br />
+版本对应表参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/shiwanghualuo/article/details/122860521">PyTorch中torch、torchvision、torchaudio、torchtext版本对应关系</a><br />
+所以先看torch版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip list | grep torch</span><br></pre></td></tr></table></figure>
+<p>再降级torchversion：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torchvision==0.17.0</span><br></pre></td></tr></table></figure>
+<p>但是降级完torchvision之后很可能发现pytorch本身又寄了（变成cpu版本），<br />
+所以再次回到上述第3条的位置，用本地whl重装一下gpu版本的pytorch，问题解决。</p>
+<h2 id="10-终端中运行-conda-install-命令后一直卡在solving-environment"><a class="markdownIt-Anchor" href="#10-终端中运行-conda-install-命令后一直卡在solving-environment"></a> 10. 终端中运行 conda install 命令后一直卡在Solving environment:</h2>
+<p>问题描述：正常创建激活环境，安装pytorch以及cuda：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install pytorch==1.13.0 torchvision==0.14.0 torchaudio==0.13.0 pytorch-cuda=11.6 -c pytorch -c nvidia</span><br></pre></td></tr></table></figure>
+<p>卡死在Solving environment：<br />
+<img src="%E9%85%8D%E7%BD%AECUDA-Pytorch%E5%85%A8%E5%AE%B6%E6%A1%B6%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95.png" alt="" /><br />
+解决思路：如果正在使用服务器，<strong>不要在无卡模式进行上述操作</strong>。<br />
+<code>pytorch-cuda=11.6</code>会<strong>明确要求安装 CUDA 11.6 对应的 GPU 版本</strong>，Conda 在解析依赖时，可能会尝试检测系统的 GPU 或驱动支持，如果此时没有显卡（即Nvidia驱动）会卡死退出。<br />
+所以更换正常模式开机，清理缓存后重新装就可以了。</p>
+<p>如果不是上述原因，其余排查思路：</p>
+<ol>
+<li>更新conda：在base环境中执行<code>conda update conda</code></li>
+<li>清理缓存：<code>conda clean --all</code></li>
+<li>AotuDL学术加速：<code>source /etc/network_turbo</code></li>
+<li>查看源、删除原来的源、添加清华源：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conda config --show</span><br><span class="line"></span><br><span class="line">conda config --remove-key channels</span><br><span class="line"></span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br></pre></td></tr></table></figure>
+<p>上述清华源官方：<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</a><br />
+最好每次换源之前都查一下，确保使用最新的有效的链接。</p>
+<h1 id="代码"><a class="markdownIt-Anchor" href="#代码"></a> 代码</h1>
+<h2 id="1-error-too-few-arguments-for-template-template-parameter-tuple"><a class="markdownIt-Anchor" href="#1-error-too-few-arguments-for-template-template-parameter-tuple"></a> 1. error : too few arguments for template template parameter Tuple</h2>
+<h2 id="解决方案"><a class="markdownIt-Anchor" href="#解决方案"></a> 解决方案：</h2>
+<p>将cast.h中报错信息相应位置附近，注释掉以下内容<br />
+<img src="%E9%85%8D%E7%BD%AECUDA-Pytorch%E5%85%A8%E5%AE%B6%E6%A1%B6%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95_2025011933.png" alt="" /><br />
+重新 python <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> build 命令，编译通过</p>
+<h2 id="2-attributeerror-module-time-has-no-attribute-clock"><a class="markdownIt-Anchor" href="#2-attributeerror-module-time-has-no-attribute-clock"></a> 2. AttributeError module ‘time‘ has no attribute ‘clock‘</h2>
+<p>Python3.X版本之后不支持<code>time.clock</code>，找到报错的文件用<code>time.perf_counter()</code>替换掉<code>time.clock</code>即可</p>
+<h2 id="3-osmkdir时出现filenotfounderror-系统找不到指定的路径"><a class="markdownIt-Anchor" href="#3-osmkdir时出现filenotfounderror-系统找不到指定的路径"></a> 3. os.mkdir()时出现FileNotFoundError:  系统找不到指定的路径</h2>
+<p>其中的一个原因是因为<code>os.mkdir()</code>只能创建一级目录，应该用<code>os.makedirs()</code>创建多级目录。将代码改为<code>os.makedirs()</code>即可</p>
+<h2 id="4-runtimeerror-program-ffmpeg-is-not-found-perhaps-install-ffmpeg-using-apt-install-ffmpeg"><a class="markdownIt-Anchor" href="#4-runtimeerror-program-ffmpeg-is-not-found-perhaps-install-ffmpeg-using-apt-install-ffmpeg"></a> 4. RuntimeError: Program ‘ffmpeg’ is not found; perhaps install ffmpeg using ‘apt install ffmpeg’.</h2>
+<p><code>conda install ffmpeg -c conda-forge</code><br />
+连接好网络，注意看清楚安装成功。</p>
+<h1 id="rdk-x5配置"><a class="markdownIt-Anchor" href="#rdk-x5配置"></a> RDK X5配置</h1>
+<h2 id="1-rdk-studio添加设备后按教程无法连接wifi"><a class="markdownIt-Anchor" href="#1-rdk-studio添加设备后按教程无法连接wifi"></a> 1. RDK Studio添加设备后按教程无法连接wifi</h2>
+<p>一些wifi的安全策略似乎会阻止来自RDK Studio的连接，而RDK Studio不会报错。尝试使用ssh登录终端，然后使用以下命令手动连接：（<strong>WIFINAME</strong>和<strong>WIFIPASSWORD</strong>替换为wifi名称和密码）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nmcli con add con-name &quot;WIFINAME&quot; ifname wlan0 type wifi ssid &quot;WIFINAME&quot;</span><br><span class="line"></span><br><span class="line">nmcli --ask con mod &quot;WIFINAME&quot; wifi-sec.key-mgmt wpa-psk wifi-sec.psk &quot;WIFIPASSWORD&quot;</span><br><span class="line"></span><br><span class="line">nmcli con up &quot;WIFINAME&quot;</span><br></pre></td></tr></table></figure>
+<p>已测试成功：<br />
+<img src="%E9%85%8D%E7%BD%AECUDA-Pytorch%E5%85%A8%E5%AE%B6%E6%A1%B6%E7%8E%AF%E5%A2%83%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95_2025011922.png" alt="" /></p>
+<h1 id="cuda配置"><a class="markdownIt-Anchor" href="#cuda配置"></a> cuda配置</h1>
+<h2 id="linux系统中cuda的位置"><a class="markdownIt-Anchor" href="#linux系统中cuda的位置"></a> linux系统中cuda的位置</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/cuda-xx.x/</span><br></pre></td></tr></table></figure>
+<h2 id="卸载cuda"><a class="markdownIt-Anchor" href="#卸载cuda"></a> 卸载cuda</h2>
+
+<div class="callout" data-callout="cite">
+<div class="callout-title">
+<div class="callout-title-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-quote"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+</div>
+<div class="callout-title-inner">参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/Supremelv/article/details/138244275">这里</a></div>
+</div>
+<div class="callout-content"><p></p>
+</div></div><p>方法一</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span>  /usr/local/cuda-11.4/bin</span><br><span class="line"><span class="built_in">sudo</span> ./cuda-uninstaller</span><br></pre></td></tr></table></figure>
+<p>方法二</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get remove cuda</span><br><span class="line"><span class="built_in">sudo</span> apt autoremove </span><br><span class="line"><span class="built_in">sudo</span> apt-get remove cuda*</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /usr/local/</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> -r cuda-11.4</span><br><span class="line"><span class="built_in">sudo</span> dpkg -l |grep cuda</span><br><span class="line"><span class="built_in">sudo</span> dpkg -P cuda-visual-tools-11-4 </span><br><span class="line"><span class="built_in">sudo</span> dpkg -P &lt;last files&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="指定cuda版本"><a class="markdownIt-Anchor" href="#指定cuda版本"></a> 指定cuda版本</h2>
+<p>设置 <code>CUDA_HOME</code> 环境变量（临时设置，只影响当前 session）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> CUDA_HOME=/usr/local/cuda-11.8</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$CUDA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$CUDA_HOME</span>/lib64:<span class="variable">$LD_LIBRARY_PATH</span></span><br></pre></td></tr></table></figure>
+<h1 id="huggingface下载模型"><a class="markdownIt-Anchor" href="#huggingface下载模型"></a> huggingface下载模型</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hf download HCMUE-Research/SAM-vit-h --local-dir ./my_model</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/3658139673/" rel="prev" title="相机标定">
+                  <i class="fa fa-angle-left"></i> 相机标定
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/1644944583/" rel="next" title="mujoco快速上手">
+                  mujoco快速上手 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-solid fa-palette"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Momaoto</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">89k</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user-group"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="190,190,190" opacity="0.8" zIndex="-1" count="100" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>
